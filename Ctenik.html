@@ -14,23 +14,27 @@
     </header>
     <main>
         <div class="VelkýBlok">
-            <div class="hlavníBlok" id="Přehled">
+            <div class="malýBlok" id="Přehled">
                 <h2>Přehled</h2>
                 <h3 id="PočKnih">Přečtené knihy:</h3>
                 <h3 id="řada">Dny v řadě:</h3>
             </div>
-            <div class="hlavníBlok" id="Statistiky">
+            <div class="malýBlok" id="Statistiky">
                 <h2>Statistiky:</h2>
-                <h3>Minuty čtení</h3>
+                <h3>Minuty čtení:</h3>
                 <canvas id="Graf"></canvas> <!-- Dodělat graf čtení za poslední týden -->
             </div>
-            <div class="hlavníBlok" id="Přispět">
-                <h3>Datum</h3>
-                <input type="date"> <!-- Dodělat v js, dnešní datum -->
-                <h3>Počet minut</h3>
-                <input type="number" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
-                <h3>Dočtení knihy</h3>
-                <input type="checkbox">
+            <div class="malýBlok" id="Přispět">
+                <h2>Záznam</h2>
+                <div id="Dotazník">
+                    <h3>Datum</h3>
+                    <input type="date"> <!-- Dodělat v js, dnešní datum -->
+                    <h3>Počet minut</h3>
+                    <input type="number" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
+                    <h3>Dočtení knihy</h3>
+                    <input type="checkbox">
+                </div>
+                <button>Zaznamenat</button>
 
             </div>
         </div>
@@ -38,14 +42,14 @@
     <footer>
         <nav>
             <div class="Odkaz">
-                <a href="">
-                    <img src="Ctenik.html" alt="">
+                <a href="Ctenik.html">
+                    <img src="img/Dům.png" class="OdkazObr">
                     <h3>Domovská stránka</h3>
                 </a>
             </div>
             <div class="Odkaz">
                 <a href="">
-                    <img src="" alt="">
+                    <img src="img/Trofej.png" class="OdkazObr">
                     <h3>Soutěž</h3>
                 </a>
             </div>

@@ -26,7 +26,42 @@ header{
     width: 50px;
     border-radius: 100%;
     border: 3px solid white;
-
     justify-self: flex-end;
 
+}
+
+.VelkýBlok{
+    margin-top: 11px;
+    background-image: linear-gradient(to bottom, rgb(0, 5, 139), rgb(93, 0, 187));
+    border-radius: 11px;
+    padding: 5px;
+}
+
+.malýBlok{
+    margin-top: 3px;
+    background-image: linear-gradient(to bottom, rgb(0, 2, 63), rgb(27, 0, 55));
+    border-radius: 11px;
+    padding: 5px;    
+}
+
+input{
+    border: 2px solid rgb(208, 0, 240);
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 5px;
+    background-color: rgb(216, 237, 255);
+}
+
+footer{
+    display: flex;
+    background-image: linear-gradient(to bottom, rgb(0, 2, 63), rgb(27, 0, 55));
+    border-radius: 11px;
+    nav{
+        display: flex;
+        justify-content: space-evenly;
+    }
+    .OdkazObr{
+        justify-self: center;
+        height: 60px;
+        width: 60px;
+    }
 }
