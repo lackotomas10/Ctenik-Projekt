@@ -5,22 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Čteník</title>
     <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>ČTENÍK</h1> <img src="" >
+        <h1 id="Nadpis">ČTENÍK</h1> <img id="Profil" src="" >
 
     </header>
     <main>
         <div id="Přehled">
             <h1></h1>
-            <h2>Přečtené knihy:</h2>
-            <h2>Dny v řadě:</h2>
+            <h2 id="PočKnih">Přečtené knihy:</h2>
+            <h2 id="řada">Dny v řadě:</h2>
         </div>
         <div id="Statistiky">
             <h2>Minuty čtení:</h2>
+            <canvas id="Graf"></canvas> <!-- Dodělat graf čtení za poslední týden -->
         </div>
         <div id="Přispět">
+            <h3>Datum</h3>
+            <input type="date"> <!-- Dodělat v js, dnešní datum -->
+            <h3>Počet minut</h3>
+            <input type="number" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
+            <h3>Dočtení knihy</h3>
+            <input type="checkbox">
 
         </div>
     </main>
