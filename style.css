@@ -143,3 +143,17 @@ button:active{
 #Konec{
     text-align: center;
 }
+
+#ŘadaSekce{
+    border-radius: 6px;
+    background-image: linear-gradient(to right, rgba(197, 255, 251, 0.437), rgb(226, 200, 255));
+    color: rgb(234, 117, 0);
+    
+}
+
+#Graf{
+    background-image: linear-gradient(to right, rgb(209, 255, 252), rgb(238, 223, 255));
+    border: 3px solid orange;
+    border-radius: 7px;
+
+}
