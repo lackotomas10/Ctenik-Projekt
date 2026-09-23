@@ -27,7 +27,7 @@ header{
     border-radius: 100%;
     border: 3px solid white;
     justify-self: flex-end;
-
+    transition: 0.5s;
 }
 
 .VelkýBlok{
@@ -45,7 +45,7 @@ header{
 }
 
 input{
-    border: 2px solid rgb(208, 0, 240);
+    border: 2px solid rgb(4, 255, 197);
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 5px;
     background-color: rgb(216, 237, 255);
@@ -64,4 +64,36 @@ footer{
         height: 60px;
         width: 60px;
     }
+}
+
+button{
+    color: white;
+    border: 2px solid rgb(4, 255, 197);
+    padding: 2px;
+    border-radius: 8px;
+    transition: 0.5s;
+    background-image: radial-gradient(rgb(0, 7, 220), rgba(90, 0, 186, 0.72));
+}
+
+button:hover{
+    color: rgb(4, 255, 197);
+    border: 2px solid rgb(251, 0, 255);
+    transition: 0.5s;
+    background-image: radial-gradient(rgb(20, 21, 60), rgba(26, 10, 43, 0.72));
+    scale: 1.1;
+
+}
+
+button:active{
+    scale: 0.8;
+    background-color: white;
+
+}
+
+#Profil:hover{
+    border: 3px solid aqua;
+    transition: 0.5s;
+    -webkit-box-shadow:0px 0px 49px 17px rgba(45,255,196,0.45);
+    -moz-box-shadow: 0px 0px 49px 17px rgba(45,255,196,0.45);
+    box-shadow: 0px 0px 49px 17px rgba(45,255,196,0.45);
 }
