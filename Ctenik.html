@@ -30,13 +30,13 @@
                 <h2>Záznam</h2>
                 <div id="Dotazník">
                     <h3>Datum</h3>
-                    <input type="date"> <!-- Dodělat v js, dnešní datum -->
+                    <input type="date" id="Datum"> <!-- Dodělat v js, dnešní datum -->
                     <h3>Počet minut</h3>
-                    <input type="number" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
+                    <input type="number" id="MinČtení" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
                     <h3>Dočtení knihy</h3> <p>(zaškrtněte pokud jste dočetli knihu)</p>
-                        <input type="checkbox">
+                        <input id="Dočtení" type="checkbox">
                 </div>
-                <button>Zaznamenat</button>
+                <button id="ZáznTlačítko" onclick="Záznam()">Zaznamenat</button>
 
             </div>
         </div>
@@ -65,3 +65,4 @@
         </div>    
 </body>
 </html>
+<script src="script.js"></script>

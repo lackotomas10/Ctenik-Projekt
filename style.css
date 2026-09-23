@@ -40,6 +40,8 @@ header{
     background-image: linear-gradient(to bottom, rgb(0, 2, 63), rgb(27, 0, 55));
     border-radius: 11px;
     padding: 5px;
+    padding-left: 12px;
+    margin: 2px;
 }
 
 input{
@@ -146,7 +148,7 @@ button:active{
 
 #ŘadaSekce{
     border-radius: 6px;
-    background-image: linear-gradient(to right, rgba(197, 255, 251, 0.437), rgb(226, 200, 255));
+    background-image: linear-gradient(to right, rgba(195, 195, 195, 0.437), rgb(118, 148, 150));
     color: rgb(234, 117, 0);
     
 }
@@ -156,4 +158,12 @@ button:active{
     border: 3px solid orange;
     border-radius: 7px;
 
+}
+
+#ZáznTlačítko{
+    display: flex;
+    text-align: right;
+    justify-self: right;
+    margin-right: 20px;
+    margin-bottom: 22px;
 }
