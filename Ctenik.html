@@ -11,28 +11,59 @@
 <body>
     <div id="AlarmPřihlášení"></div>
     <header>
-        <h1 id="Nadpis">ČTENÍK</h1> <img id="Profil" src="img/Uživatel.jpg" >
+        <h1 id="Nadpis">ČTENÍK</h1> <img id="Profil" src="img/Uživatel.jpg" alt="Uživatelský profil" tabindex="0" onclick="Přihlásit()" onkeydown="if (event.key === 'Enter' || event.key === ' ') Přihlásit()">
 
     </header>
+    <div id="PřihlášeníOkno" class="modal" hidden>
+        <div class="modalObsah" role="dialog" aria-modal="true" aria-labelledby="PřihlášeníNadpis">
+            <button class="modalZavřít" type="button" onclick="ZavřítPřihlášení()" aria-label="Zavřít">&times;</button>
+            <img class="modalProfil" src="img/Uživatel.jpg" alt="Uživatelský profil">
+            <h2 id="PřihlášeníNadpis">Přihlášení</h2>
+            <form id="PřihlášeníForm" onsubmit="PřihlášeníOdeslat(event)">
+                <label for="PřihlašovacíJméno">Jméno</label>
+                <input id="PřihlašovacíJméno" type="text" autocomplete="username" required>
+                <label for="PřihlašovacíHeslo">Heslo</label>
+                <input id="PřihlašovacíHeslo" type="password" autocomplete="current-password" required>
+                <label class="checkboxŘádek" for="ZapamatovatUživatele">
+                    <input id="ZapamatovatUživatele" type="checkbox">
+                    Zapamatovat uživatele
+                </label>
+                <p id="PřihlášeníChyba" class="formChyba" role="alert"></p>
+                <button type="submit">Přihlásit</button>
+            </form>
+            
+            <form id="RegistraceForm" onsubmit="RegistraceOdeslat(event)" hidden>
+                <h2>Registrace</h2>
+                <label for="RegistračníJméno">Jméno</label>
+                <input id="RegistračníJméno" type="text" autocomplete="username" required>
+                <label for="RegistračníHeslo">Heslo</label>
+                <input id="RegistračníHeslo" type="password" autocomplete="new-password" required>
+                <label for="RegistračníHesloZnovu">Heslo znovu</label>
+                <input id="RegistračníHesloZnovu" type="password" autocomplete="new-password" required>
+                <p id="RegistraceChyba" class="formChyba" role="alert"></p>
+                <button type="submit">Zaregistrovat</button>
+            </form>
+        </div>
+    </div>
     <main>
         <div class="VelkýBlok">
             <div class="malýBlok" id="Přehled">
                 <h2>Přehled</h2>
-                <h3 id="PočKnih">Přečtené knihy:</h3>
+                <h3 id="PočKnih">Přečtené knihy: 0</h3>
                 <div id="ŘadaSekce">
-                    <h3 id="řada">Dny v řadě:</h3>
+                    <h3 id="řada">Dny v řadě: 0</h3>
                 </div>
             </div>
             <div class="malýBlok" id="Statistiky">
                 <h2>Statistiky:</h2>
-                <h3>Minuty čtení:</h3>
+                <h3 id="Minuty">Minuty čtení: 0</h3>
                 <canvas id="Graf"></canvas> <!-- Dodělat graf čtení za poslední týden -->
             </div>
             <div class="malýBlok" id="Přispět">
                 <h2>Záznam</h2>
                 <div id="Dotazník">
                     <h3>Datum</h3>
-                    <input type="date" id="Datum"> <!-- Dodělat v js, dnešní datum -->
+                    <input type="date" id="Datum"> 
                     <h3>Počet minut</h3>
                     <input type="number" id="MinČtení" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
                     <h3>Dočtení knihy</h3> <p>(zaškrtněte pokud jste dočetli knihu)</p>

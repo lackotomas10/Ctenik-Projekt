@@ -25,6 +25,7 @@ header{
     border: 3px solid white;
     justify-self: flex-end;
     transition: 0.5s;
+    cursor: pointer;
 }
 
 .VelkýBlok{
@@ -165,4 +166,89 @@ button:active{
     justify-self: right;
     margin-right: 20px;
     margin-bottom: 22px;
+}
+
+.modal[hidden], form[hidden], .textovéTlačítko[hidden], #PřihlášeníNadpis[hidden]{
+    display: none;
+}
+
+.modal{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background-color: rgba(0, 0, 35, 0.75);
+    z-index: 10;
+}
+
+.modalObsah{
+    position: relative;
+    width: min(100%, 360px);
+    padding: 24px;
+    border-radius: 11px;
+    background-image: linear-gradient(to bottom, rgb(0, 5, 139), rgb(93, 0, 187));
+    box-shadow: 0 0 30px rgba(4, 255, 197, 0.35);
+    box-sizing: border-box;
+}
+
+.modalObsah h2{
+    margin-top: 12px;
+    text-align: center;
+}
+
+.modalProfil{
+    display: block;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    border: 3px solid white;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.modalZavřít{
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: 0;
+    background: transparent;
+    font-size: 26px;
+    line-height: 1;
+}
+
+.modalObsah form{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.modalObsah form button{
+    align-self: center;
+    margin-top: 8px;
+}
+
+.checkboxŘádek{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.textovéTlačítko{
+    display: block;
+    margin: 18px auto 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: white;
+    text-decoration: underline;
+}
+
+.formChyba{
+    min-height: 18px;
+    margin: 4px 0 0;
+    color: rgb(255, 151, 151);
+    text-align: center;
 }
