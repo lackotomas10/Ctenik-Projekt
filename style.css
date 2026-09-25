@@ -1,3 +1,15 @@
+html{
+    scrollbar-color:rgb(11, 225, 168) rgb(4, 0, 82) ;
+    scrollbar-width: auto;
+    ::selection{
+        background: rgb(255, 192, 20);
+
+    }
+
+}
+
+
+
 body{
     background-image: linear-gradient(to bottom, rgb(4, 0, 82), rgb(135, 15, 255));
     font-family: Arial, Helvetica, sans-serif;
@@ -160,8 +172,8 @@ button:active{
 
 #ŘadaSekce{
     border-radius: 6px;
-    background-image: linear-gradient(to right, rgba(195, 195, 195, 0.437), rgb(118, 148, 150));
-    color: rgb(234, 117, 0);
+    background-image: linear-gradient(to right, rgba(195, 195, 195, 0.232), rgb(118, 148, 150));
+    color: rgb(248, 124, 0);
     
 }
 
@@ -269,6 +281,8 @@ button:active{
     border: 2px solid white;
     border-radius: 9px;
     background-color: rgb(50, 0, 96);
+    width: 87%;
+    align-self: center;
 }
 
 .Hlava{
@@ -281,6 +295,7 @@ button:active{
 .Řádek{
     background-color: rgb(31, 0, 87);
     color: rgb(255, 254, 255);
+    width: 77%;
 }
 
 .Buňka{
@@ -288,5 +303,6 @@ button:active{
     color: rgb(38, 16, 0);
     border-radius: 6px;
     border: 0.1px solid blue;
+    text-align:center;
 
 }
