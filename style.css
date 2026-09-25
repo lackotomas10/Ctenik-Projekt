@@ -252,3 +252,29 @@ button:active{
     color: rgb(255, 151, 151);
     text-align: center;
 }
+
+#SoutěžTabulka{
+    border: 2px solid white;
+    border-radius: 9px;
+    background-color: rgb(50, 0, 96);
+}
+
+.Hlava{
+    background-color: rgb(4, 255, 197);
+    color: rgb(120, 0, 232);
+    border-radius: 2px;
+    border: 1px solid rgb(255, 164, 28);
+}
+
+.Řádek{
+    background-color: rgb(31, 0, 87);
+    color: rgb(255, 254, 255);
+}
+
+.Buňka{
+    background-color: rgb(46, 249, 249);
+    color: rgb(38, 16, 0);
+    border-radius: 6px;
+    border: 0.1px solid blue;
+
+}
