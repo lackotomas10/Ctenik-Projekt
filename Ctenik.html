@@ -30,6 +30,7 @@
                 </label>
                 <p id="PřihlášeníChyba" class="formChyba" role="alert"></p>
                 <button type="submit">Přihlásit</button>
+                <button class="textovéTlačítko" type="button" onclick="ZobrazitRegistraci()">Vytvořit nový účet</button>
             </form>
             
             <form id="RegistraceForm" onsubmit="RegistraceOdeslat(event)" hidden>
@@ -42,6 +43,7 @@
                 <input id="RegistračníHesloZnovu" type="password" autocomplete="new-password" required>
                 <p id="RegistraceChyba" class="formChyba" role="alert"></p>
                 <button type="submit">Zaregistrovat</button>
+                <button class="textovéTlačítko" type="button" onclick="ZobrazitPřihlášení()">Už máte účet? Přihlásit se</button>
             </form>
         </div>
     </div>
@@ -57,7 +59,7 @@
             <div class="malýBlok" id="Statistiky">
                 <h2>Statistiky:</h2>
                 <h3 id="Minuty">Minuty čtení: 0</h3>
-                <canvas id="Graf"></canvas> <!-- Dodělat graf čtení za poslední týden -->
+                <canvas id="Graf" aria-label="Graf minut čtení za posledních sedm dní"></canvas>
             </div>
             <div class="malýBlok" id="Přispět">
                 <h2>Záznam</h2>

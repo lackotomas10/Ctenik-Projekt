@@ -178,6 +178,10 @@ button:active{
 }
 
 #Graf{
+    display: block;
+    width: 100%;
+    height: 220px;
+    box-sizing: border-box;
     background-image: linear-gradient(to right, rgb(209, 255, 252), rgb(238, 223, 255));
     border: 3px solid orange;
     border-radius: 7px;
