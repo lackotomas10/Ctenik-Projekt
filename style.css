@@ -92,7 +92,9 @@ footer .Odkaz{
     display: flex;
     justify-content: center;
     text-align: center;
+    transition: 0.5s;
 }
+
 
 footer .Odkaz a{
     display: flex;
@@ -109,7 +111,17 @@ footer .Odkaz h3{
 footer .OdkazObr{
     height: 60px;
     width: 60px;
+
 }
+    .OdkazObr:hover{
+        transition: 0.5s;
+        scale: 1.06;
+    }
+    .OdkazObr:active{
+        scale: 0.9; 
+
+
+    }
 
 button{
     color: white;
