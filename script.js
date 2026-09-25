@@ -36,7 +36,7 @@ function Přihlásit(){
         return
     }
     document.getElementById('PřihlášeníOkno').hidden = false
-    ZobrazitPřihlášení()
+
     document.getElementById('PřihlašovacíJméno').focus()
 }
 
