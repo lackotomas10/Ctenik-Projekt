@@ -139,7 +139,7 @@ function VykreslitGraf(záznamy){
         const výškaSloupce = (den.minuty / vršekOsy) * výškaGrafu
         const x = okraj.vlevo + index * šířkaSloupce + (šířkaSloupce - šířkaSloupceGrafu) / 2
         const y = okraj.nahoře + výškaGrafu - výškaSloupce
-        kontext.fillStyle = den.datum === dnešníDatum ? 'rgb(255, 164, 28)' : 'rgb(11, 225, 168)'
+        kontext.fillStyle = den.datum === dnešníDatum ? 'rgb(255, 154, 2)' : "rgb(255, 154, 2)"
         kontext.fillRect(x, y, šířkaSloupceGrafu, Math.max(výškaSloupce, 1))
         kontext.fillStyle = 'rgb(4, 0, 82)'
         kontext.textAlign = 'center'
