@@ -6,6 +6,7 @@
     <title>Soutěž</title>
     <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
+    <script src="soutez.js" defer></script>
 </head>
 <body>
     <header>
@@ -20,27 +21,12 @@
                 <p>Tady najdete tabulku, kde můžete soutěžit s kamarády.</p>
                 <div id="Tabulka">
                     <table id="SoutěžTabulka">
-                        <tr class="Řádek">
+                        <thead>
+                            <tr class="Řádek">
                             <th class="Hlava" style="width: 10%;">Pořadí</th><th class="Hlava">Jméno</th><th class="Hlava">Minuty</th>
-                        </tr>
-                        <tr class="Řádek">
-                            <td class="Buňka">1.</td><td class="Buňka">Luboš</td><td class="Buňka">488</td>
-                        </tr>
-                        <tr class="Řádek">
-                            <td class="Buňka">2.</td><td class="Buňka">Petr</td><td class="Buňka">329</td>
-                        </tr>
-                        <tr class="Řádek">
-                            <td class="Buňka">3.</td><td class="Buňka">Milan</td><td class="Buňka">278</td>
-                        </tr>
-                        <tr class="Řádek">
-                            <td class="Buňka">4.</td><td class="Buňka">Emil</td><td class="Buňka">205</td>
-                        </tr>
-                        <tr class="Řádek">
-                            <td class="Buňka">5.</td><td class="Buňka">Franta</td><td class="Buňka">125</td>
-                        </tr>
-                        <tr class="Řádek">
-                            <td class="Buňka">6.</td><td class="Buňka">Šimon</td><td class="Buňka">39</td>
-                        </tr>
+                            </tr>
+                        </thead>
+                        <tbody id="VýsledkySoutěže"></tbody>
                     </table>
 
                 </div>
