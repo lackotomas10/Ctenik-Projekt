@@ -28,6 +28,7 @@ header{
 }
 
 #Profil{
+    margin-left: 3%;
     background-color: white;
     height: 50px;
     width: 50px;
@@ -55,7 +56,8 @@ header{
 }
 
 input{
-    width: 21%;
+    width: 22%;
+    max-width: 160px;
     border: 2px solid rgb(4, 255, 197);
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 5px;
@@ -170,14 +172,18 @@ button:active{
     border-radius: 6px;
     background-image: linear-gradient(to right, rgba(195, 195, 195, 0.232), rgb(118, 148, 150));
     color: rgb(248, 124, 0);
-    width: 100%;
+    width: 32%;
+    max-width: 170px;
     
 }
 
 #Graf{
     display: block;
     width: 100%;
+    max-width: 500px;
     height: 220px;
+    height: 100%;
+    max-height: 220px;
     box-sizing: border-box;
     background-image: linear-gradient(to right, rgb(209, 255, 252), rgb(238, 223, 255));
     border: 3px solid orange;
@@ -309,4 +315,8 @@ button:active{
     border-radius: 6px;
     border: 0.1px solid blue;
     text-align:center;
+}
+
+p{
+    text-indent: 3%;
 }
