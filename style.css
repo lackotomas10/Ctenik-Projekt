@@ -55,10 +55,12 @@ header{
 }
 
 input{
+    width: 21%;
     border: 2px solid rgb(4, 255, 197);
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 5px;
     background-color: rgb(216, 237, 255);
+    outline: none;
 }
 
 input[type="checkbox"]{
@@ -132,7 +134,7 @@ footer .OdkazObr{
 button{
     color: white;
     border: 2px solid rgb(4, 255, 197);
-    padding: 2px;
+    padding: 4px;
     border-radius: 8px;
     transition: 0.5s;
     background-image: radial-gradient(rgb(0, 7, 220), rgba(90, 0, 186, 0.72));
@@ -168,6 +170,7 @@ button:active{
     border-radius: 6px;
     background-image: linear-gradient(to right, rgba(195, 195, 195, 0.232), rgb(118, 148, 150));
     color: rgb(248, 124, 0);
+    width: 100%;
     
 }
 
@@ -206,6 +209,7 @@ button:active{
 }
 
 .modalObsah{
+    text-align: center;
     position: relative;
     width: min(100%, 360px);
     padding: 24px;
@@ -244,6 +248,7 @@ button:active{
     display: flex;
     flex-direction: column;
     gap: 7px;
+    align-items: center;
 }
 
 .modalObsah form button{
@@ -287,7 +292,9 @@ button:active{
     background-color: rgb(4, 255, 197);
     color: rgb(120, 0, 232);
     border-radius: 2px;
-    border: 1px solid rgb(255, 164, 28);
+    border: 1px solid rgb(173, 0, 221);
+    padding: 2px;
+    margin-bottom: 2px;
 }
 
 .Řádek{
