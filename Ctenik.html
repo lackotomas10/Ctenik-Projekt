@@ -20,9 +20,9 @@
             <h2 id="PřihlášeníNadpis">Přihlášení</h2>
             <form id="PřihlášeníForm" onsubmit="PřihlášeníOdeslat(event)">
                 <label for="PřihlašovacíJméno">Jméno</label>
-                <input id="PřihlašovacíJméno" type="text" autocomplete="username" required>
+                <input id="PřihlašovacíJméno" type="text" placeholder="Jan Novák" autocomplete="username" required>
                 <label for="PřihlašovacíHeslo">Heslo</label>
-                <input id="PřihlašovacíHeslo" type="password" autocomplete="current-password" required>
+                <input id="PřihlašovacíHeslo" type="password" placeholder="Heslo" autocomplete="current-password" required>
                 <label class="checkboxŘádek" for="ZapamatovatUživatele">
                     <input id="ZapamatovatUživatele" type="checkbox">
                     Zapamatovat uživatele
@@ -35,11 +35,11 @@
             <form id="RegistraceForm" onsubmit="RegistraceOdeslat(event)" hidden>
                 <h2>Registrace</h2>
                 <label for="RegistračníJméno">Jméno</label>
-                <input id="RegistračníJméno" type="text" autocomplete="username" required>
+                <input id="RegistračníJméno" type="text" placeholder="Jan Novák" autocomplete="username" required>
                 <label for="RegistračníHeslo">Heslo</label>
-                <input id="RegistračníHeslo" type="password" autocomplete="new-password" required>
+                <input id="RegistračníHeslo" type="password" placeholder="Heslo" autocomplete="new-password" required>
                 <label for="RegistračníHesloZnovu">Heslo znovu</label>
-                <input id="RegistračníHesloZnovu" type="password" autocomplete="new-password" required>
+                <input id="RegistračníHesloZnovu" type="password" placeholder="Heslo" autocomplete="new-password" required>
                 <p id="RegistraceChyba" class="formChyba" role="alert"></p>
                 <button type="submit">Zaregistrovat</button>
                 <button class="textovéTlačítko" type="button" onclick="ZobrazitPřihlášení()">Už máte účet? Přihlásit se</button>
