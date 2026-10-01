@@ -9,10 +9,11 @@ const klíčÚčtů = 'ctenikÚčty'
 document.getElementById('Datum').value = dnešníDatum;
 
 const Účty = NačístÚčty()
-let PřihlášenýUživatel = localStorage.getItem('ctenikPrihlasenýUživatel') || ''
+let PřihlášenýUživatel = sessionStorage.getItem('ctenikPrihlasenýUživatel') || localStorage.getItem('ctenikPrihlasenýUživatel') || ''
 let Přihlášení = Boolean(PřihlášenýUživatel && Účty[NormalizovatJméno(PřihlášenýUživatel)])
 if (!Přihlášení) {
     PřihlášenýUživatel = ''
+    sessionStorage.removeItem('ctenikPrihlasenýUživatel')
     localStorage.removeItem('ctenikPrihlasenýUživatel')
 }
 
@@ -163,6 +164,7 @@ function AktualizovatŘadu(záznamy){
 
 function Přihlásit(){
     if (Přihlášení) {
+        sessionStorage.removeItem('ctenikPrihlasenýUživatel')
         localStorage.removeItem('ctenikPrihlasenýUživatel')
         PřihlášenýUživatel = ''
         Přihlášení = false
@@ -206,6 +208,7 @@ function PřihlášeníOdeslat(event){
 
     PřihlášenýUživatel = účet.jméno
     Přihlášení = true
+    sessionStorage.setItem('ctenikPrihlasenýUživatel', PřihlášenýUživatel)
     if (document.getElementById('ZapamatovatUživatele').checked) {
         localStorage.setItem('ctenikPrihlasenýUživatel', PřihlášenýUživatel)
     } else {
@@ -256,10 +259,14 @@ function Aktualizace(){
     const dny = Object.values(záznamy)
     const minutyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.minuty) || 0), 0)
     const knihyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.knihy) || 0), 0)
+    const početDníSeČtením = dny.filter(záznam => Number(záznam.minuty) > 0).length
+    const minutyZaDen = početDníSeČtením ? minutyCelkem / početDníSeČtením : 0
 
     document.getElementById('AlarmPřihlášení').innerText = ''
     document.getElementById('AlarmPřihlášení').style.backgroundColor = 'transparent'
+    document.getElementById('JménoUživatele').innerText = PřihlášenýUživatel
     document.getElementById('Minuty').innerText = 'Minuty čtení: ' + minutyCelkem
+    document.getElementById('MinutyZaDen').innerText = 'Minuty za den: ' + minutyZaDen.toLocaleString('cs-CZ', { maximumFractionDigits: 1 })
     document.getElementById('PočKnih').innerText = 'Přečtené knihy: ' + knihyCelkem
     AktualizovatŘadu(záznamy)
     VykreslitGraf(záznamy)

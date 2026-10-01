@@ -46,13 +46,36 @@ header{
     padding: 5px;
 }
 
+#DomovskýBlok{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch;
+}
+
+#DomovskýBlok > .malýBlok{
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
 .malýBlok{
+    width: 100%;
     margin-top: 3px;
     background-image: linear-gradient(to bottom, rgb(0, 2, 63), rgb(27, 0, 55));
     border-radius: 11px;
     padding: 5px;
     padding-left: 12px;
     margin: 2px;
+    max-width: 520px;
+
+}
+
+@media (max-width: 800px){
+    #DomovskýBlok{
+        grid-template-columns: 1fr;
+    }
 }
 
 input{
@@ -181,7 +204,6 @@ button:active{
     display: block;
     width: 100%;
     max-width: 500px;
-    height: 220px;
     height: 100%;
     max-height: 220px;
     box-sizing: border-box;
@@ -319,4 +341,15 @@ button:active{
 
 p{
     text-indent: 3%;
+}
+
+#BezOzdob{
+    text-decoration: none;
+    color: rgb(96, 225, 237);
+    transition: color 0.2s;
+}
+
+#BezOzdob:hover,
+#BezOzdob:focus-visible{
+    color: rgb(255, 192, 20);
 }
