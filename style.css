@@ -353,3 +353,11 @@ p{
 #BezOzdob:focus-visible{
     color: rgb(255, 192, 20);
 }
+
+#Logo{
+    scale: 0.6;
+    position: relative;
+    top: -55px; 
+    margin-bottom: -100px; 
+    vertical-align: middle
+}
