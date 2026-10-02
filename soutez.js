@@ -24,12 +24,51 @@ function NačístMinuty(jméno){
     }, 0)
 }
 
+function DatumPosunout(datum, početDní){
+    const den = new Date(`${datum}T00:00:00Z`)
+    den.setUTCDate(den.getUTCDate() + početDní)
+    return den.toISOString().slice(0, 10)
+}
+
+function PočetDníVŘadě(záznamy){
+    if (!záznamy || typeof záznamy !== 'object') return 0
+
+    const dnes = new Date()
+    const yyyy = dnes.getFullYear()
+    const mm = String(dnes.getMonth() + 1).padStart(2, '0')
+    const dd = String(dnes.getDate()).padStart(2, '0')
+    const dnešníDatum = `${yyyy}-${mm}-${dd}`
+    const dnesČte = (záznamy[dnešníDatum]?.minuty || 0) > 0
+    const včera = DatumPosunout(dnešníDatum, -1)
+    let datum = dnesČte ? dnešníDatum : včera
+    let početDní = 0
+
+    while ((záznamy[datum]?.minuty || 0) > 0) {
+        početDní++
+        datum = DatumPosunout(datum, -1)
+    }
+
+    return početDní
+}
+
 function VykreslitSoutěž(){
     const účty = NačístJSON(klíčÚčtů, {})
     const soutěžící = Object.values(účty && typeof účty === 'object' ? účty : {})
         .filter(účet => typeof účet?.jméno === 'string' && účet.jméno.trim())
-        .map(účet => ({ jméno: účet.jméno, minuty: NačístMinuty(účet.jméno) }))
-        .sort((první, druhý) => druhý.minuty - první.minuty || první.jméno.localeCompare(druhý.jméno, 'cs-CZ'))
+        .map(účet => {
+            const jméno = účet.jméno
+            const záznamy = NačístJSON(`${předponaZáznamů}${NormalizovatJméno(jméno)}`, {})
+            return {
+                jméno,
+                minuty: NačístMinuty(jméno),
+                dnyVŘadě: PočetDníVŘadě(záznamy)
+            }
+        })
+        .sort((první, druhý) =>
+            druhý.minuty - první.minuty ||
+            druhý.dnyVŘadě - první.dnyVŘadě ||
+            první.jméno.localeCompare(druhý.jméno, 'cs-CZ')
+        )
 
     const výsledky = document.getElementById('VýsledkySoutěže')
     výsledky.replaceChildren()
@@ -39,7 +78,7 @@ function VykreslitSoutěž(){
         řádek.className = 'Řádek'
         const buňka = document.createElement('td')
         buňka.className = 'Buňka'
-        buňka.colSpan = 3
+        buňka.colSpan = 4
         buňka.textContent = 'Zatím nejsou registrovaní žádní uživatelé.'
         řádek.append(buňka)
         výsledky.append(řádek)
@@ -53,7 +92,8 @@ function VykreslitSoutěž(){
         for (const hodnota of [
             `${index + 1}.`,
             soutěžící.jméno,
-            soutěžící.minuty.toLocaleString('cs-CZ')
+            soutěžící.minuty.toLocaleString('cs-CZ'),
+            String(soutěžící.dnyVŘadě)
         ]) {
             const buňka = document.createElement('td')
             buňka.className = 'Buňka'

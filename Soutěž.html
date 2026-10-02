@@ -14,7 +14,7 @@
         <img id="Profil" style="pointer-events: none;" src="img/Uživatel.jpg" alt="Uživatelský profil">
     </header>
     <main>
-        <div class="VelkýBlok">
+        <div class="VelkýBlok" id="DomovskýBlok">
             <div class="malýBlok">
                 <h2>Soutěž</h2>
                 <p>Tady najdete tabulku, kde můžete soutěžit s kamarády.</p>
@@ -22,12 +22,15 @@
                     <table id="SoutěžTabulka">
                         <thead>
                             <tr class="Řádek">
-                            <th class="Hlava" style="width: 10%;">Pořadí</th><th class="Hlava">Jméno</th><th class="Hlava">Minuty</th>
+                            <th class="Hlava" style="width: 10%;">Pořadí</th><th class="Hlava">Jméno</th><th class="Hlava">Minuty</th><th class="Hlava" id="DnyVŘaděTab">Řada</th>
                             </tr>
                         </thead>
                         <tbody id="VýsledkySoutěže"></tbody>
                     </table>
                 </div>
+                
+            </div>
+            <div class="malýBlok">
                 <article id="informace">
                     <h2>O nás</h2>
                     <p>Jsme z Plzně, snažíme se připravit co nejlepší web pro všechny studenty, kteří čtou nebo jen začínají. Doufáme, že vám náš projekt pomůže vylepšit užití vašeho volného času.</p>
@@ -36,7 +39,15 @@
                     <h3>Kontakt</h3>
                     <p>Můžete nás kontaktovat na </a>e-mailu</a> nebo <a>instagramu</a>, rádi vám odpovíme na dotazy. Popřípadě vám pomůžeme s technickými problémy. Děkujeme, že jste si vyrali náš web. </p><!-- href="mailto:placeholder" -->
                 </article>
-            </div>
+            </div> 
+            <div class="malýBlok">
+                <h2>O soutěži</h2>
+                <p>Soutěž je výzva pro studenty, kteří chtějí soutěžit s kamarády a ostatnímy čtenáři. Pohled na tabulku výsledků vám umožní sledovat jak moc čtete s porovnání s ostatními čtenáři a může dodat potřebnou motivaci pro další produktivní minuty s knihou.</p>
+                <h3>Pravidla soutěže</h3>
+                <p>Pravidla soutěže jsou jednoduchá, všichni účastníci se řadí podle počtu minut strávených čtením. Pokud mají více uživatelů stejný počet minut řadí se podle dní v řadě.</p>
+
+            </div>   
+        
         </div>
     </main>
     <footer>

@@ -79,6 +79,7 @@ header{
 }
 
 input{
+    min-width: 100px;
     width: 22%;
     max-width: 160px;
     border: 2px solid rgb(4, 255, 197);
@@ -89,6 +90,7 @@ input{
 }
 
 input[type="checkbox"]{
+    min-width: 20px;
     appearance: none;
     width: 20px;
     height: 20px;
@@ -312,8 +314,13 @@ button:active{
     border: 2px solid white;
     border-radius: 9px;
     background-color: rgb(50, 0, 96);
-    width: 87%;
     align-self: center;
+}
+
+#DnyVŘaděTab{
+    width: 10%;
+    min-width: 44px;
+
 }
 
 .Hlava{
