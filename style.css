@@ -133,6 +133,10 @@ footer .Odkaz{
     transition: 0.5s;
 }
 
+footer .Odkaz[hidden]{
+    display: none;
+}
+
 
 footer .Odkaz a{
     display: flex;

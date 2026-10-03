@@ -105,8 +105,28 @@ function VykreslitSoutěž(){
     })
 }
 
+function AktualizovatNastaveníOdkaz(){
+    const jméno = sessionStorage.getItem('ctenikPrihlasenýUživatel') || localStorage.getItem('ctenikPrihlasenýUživatel') || ''
+    const účty = NačístJSON(klíčÚčtů, {})
+    const starýÚčet = NačístJSON(klíčStaréhoÚčtu, null)
+    const účet = účty && typeof účty === 'object' ? účty[NormalizovatJméno(jméno)] : null
+    const přihlášeno = Boolean(
+        jméno &&
+        (účet || (
+            starýÚčet?.jméno &&
+            starýÚčet?.heslo &&
+            NormalizovatJméno(starýÚčet.jméno) === NormalizovatJméno(jméno)
+        ))
+    )
+    document.getElementById('NastaveníOdkaz').hidden = !přihlášeno
+}
+
+AktualizovatNastaveníOdkaz()
 VykreslitSoutěž()
 window.addEventListener('storage', event => {
+    if (event.key === klíčÚčtů || event.key === klíčStaréhoÚčtu || event.key === 'ctenikPrihlasenýUživatel') {
+        AktualizovatNastaveníOdkaz()
+    }
     if (event.key === klíčÚčtů || event.key === klíčStaréhoÚčtu || event.key?.startsWith(předponaZáznamů)) {
         VykreslitSoutěž()
     }

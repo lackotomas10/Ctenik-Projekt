@@ -247,6 +247,7 @@ function RegistraceOdeslat(event){
 function Aktualizace(){
     document.getElementById('Přehled').hidden = !Přihlášení
     document.getElementById('Statistiky').hidden = !Přihlášení
+    document.getElementById('NastaveníOdkaz').hidden = !Přihlášení
     if (!Přihlášení) {
         document.getElementById('AlarmPřihlášení').innerText = 'Nejste přihlášni, většina funkcí nebude aktivní'
         document.getElementById('AlarmPřihlášení').style.color = 'red'
@@ -275,4 +276,3 @@ function Aktualizace(){
 window.addEventListener('resize', () => {
     if (Přihlášení) VykreslitGraf(NačístZáznamy())
 })
-
