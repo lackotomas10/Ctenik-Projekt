@@ -48,6 +48,13 @@
     </div>
     <main>
         <div class="VelkýBlok" id="DomovskýBlok">
+            <div class="malýBlok" id="PřihlášeníVýzva" hidden>
+                <h2>Vítejte ve Čteníku!</h2>
+                <p><a class="BezOzdob" onclick="Přihlásit()">Přihlaste se nebo si vytvořte účet</a>, abyste mohli zaznamenávat své čtení a sledovat své statisiky a začít řadu. Odemknete i další funkce, jako soutěžení v lize čtenářů.
+                    <a class="BezOzdob" href="Soutěž.html">Tady</a> se můžete kouknout na tabulku soutěže bez přihlášení.
+                </p>
+                <button type="button" onclick="Přihlásit()">Přihlásit se</button>
+            </div>
             <div class="malýBlok" id="Přehled">
                 <h2>Přehled:</h2>
                 <h2>Dobrý den, <span id="JménoUživatele"></span></h2>
@@ -55,7 +62,9 @@
                 <div id="ŘadaSekce">
                     <h3 id="řada">Dny v řadě: 0</h3>
                 </div>
-                <p>Vítáme Vás, ve čteníku! Přejeme vám zábavu při čtení a plynulý zážitek z našich stránek. <a id="BezOzdob" href="Soutěž.html">Tady se můžete kouknout na tabulku soutěže.</a> </p>
+                <p>Vítáme Vás, ve čteníku! Přejeme vám zábavu při čtení a plynulý zážitek z našich stránek. <a class="BezOzdob" href="Soutěž.html">Tady se můžete kouknout na tabulku soutěže.</a>
+                 Klikněte <a class="BezOzdob" href="#Dočtení">sem </a> pro nový záznam. Vaše řada má aktuálně <span id="řadaAkt">0 dnů</span>, doufáme, že bude co nejdelší. 
+                </p>
             </div>
             <div class="malýBlok" id="Statistiky">
                 <h2>Statistiky:</h2>

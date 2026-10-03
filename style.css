@@ -2,14 +2,18 @@ html{
     scrollbar-color:rgb(11, 225, 168) rgb(4, 0, 82) ;
     scrollbar-width: auto;
     ::selection{
-        background: rgb(255, 192, 20);
+        background: rgb(248, 124, 0);
+        color: rgb(68, 3, 133);
     }
+    scroll-behavior: smooth;
 }
 
 
 
 body{
     background-image: linear-gradient(to bottom, rgb(4, 0, 82), rgb(135, 15, 255));
+    background-repeat: no-repeat;
+    background-color: rgb(135, 15, 255);
     font-family: Arial, Helvetica, sans-serif;
     color: white;
 }
@@ -214,7 +218,7 @@ button:active{
     max-height: 220px;
     box-sizing: border-box;
     background-image: linear-gradient(to right, rgb(209, 255, 252), rgb(238, 223, 255));
-    border: 3px solid orange;
+    border: 3px solid rgb(248, 124, 0);
     border-radius: 7px;
 
 }
@@ -354,14 +358,20 @@ p{
     text-indent: 3%;
 }
 
-#BezOzdob{
+.BezOzdob{
     text-decoration: none;
     color: rgb(96, 225, 237);
-    transition: color 0.2s;
+    transition: 0.5s;
+    cursor: pointer;
 }
 
-#BezOzdob:hover,
-#BezOzdob:focus-visible{
+.BezOzdob:hover{
+    color:aquamarine;
+    transition: 0.5s;
+    text-shadow: 1px 1px 2px rgba(18, 249, 126, 0.76);;
+}
+
+.BezOzdob:focus-visible{
     color: rgb(255, 192, 20);
 }
 

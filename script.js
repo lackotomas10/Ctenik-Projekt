@@ -160,6 +160,18 @@ function AktualizovatŘadu(záznamy){
         datum = DatumPosunout(datum, -1)
     }
     document.getElementById('řada').innerText = `Dny v řadě: ${početDní}`
+    if (početDní === 0) {
+        document.getElementById("řadaAkt").innerText = početDní+" dnů"
+    }
+    else if (početDní === 1) {
+    document.getElementById("řadaAkt").innerText = početDní+" den"
+    }
+    else if (početDní > 1 && početDní < 5) {
+    document.getElementById("řadaAkt").innerText = početDní+" dny"
+    }    
+    else if (početDní > 4) {
+    document.getElementById("řadaAkt").innerText = početDní+" dnů"
+    }    
 }
 
 function Přihlásit(){
@@ -245,6 +257,7 @@ function RegistraceOdeslat(event){
 }
 
 function Aktualizace(){
+    document.getElementById('PřihlášeníVýzva').hidden = Přihlášení
     document.getElementById('Přehled').hidden = !Přihlášení
     document.getElementById('Statistiky').hidden = !Přihlášení
     document.getElementById('NastaveníOdkaz').hidden = !Přihlášení
@@ -260,8 +273,10 @@ function Aktualizace(){
     const dny = Object.values(záznamy)
     const minutyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.minuty) || 0), 0)
     const knihyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.knihy) || 0), 0)
-    const početDníSeČtením = dny.filter(záznam => Number(záznam.minuty) > 0).length
-    const minutyZaDen = početDníSeČtením ? minutyCelkem / početDníSeČtením : 0
+    const minutyZaPosledníchSedmDní = Array.from({ length: 7 }, (_, index) =>
+        DatumPosunout(dnešníDatum, index - 6)
+    ).reduce((součet, datum) => součet + (Number(záznamy[datum]?.minuty) || 0), 0)
+    const minutyZaDen = minutyZaPosledníchSedmDní / 7
 
     document.getElementById('AlarmPřihlášení').innerText = ''
     document.getElementById('AlarmPřihlášení').style.backgroundColor = 'transparent'
