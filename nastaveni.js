@@ -28,7 +28,10 @@ const platnýStarýÚčet = starýÚčet?.jméno &&
     : null
 
 if (přihlášenéJméno && (účet?.jméno || platnýStarýÚčet)) {
-    document.getElementById('JménoUživatele').textContent = účet?.jméno || platnýStarýÚčet.jméno
+    const jméno = účet?.jméno || platnýStarýÚčet.jméno
+    document.querySelectorAll('.JménoUživatele').forEach(prvek => {
+        prvek.textContent = jméno
+    })
 } else {
     sessionStorage.removeItem(klíčPřihlášenéhoUživatele)
     localStorage.removeItem(klíčPřihlášenéhoUživatele)

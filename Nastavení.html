@@ -17,18 +17,30 @@
         <div class="VelkýBlok" id="DomovskýBlok">
             <div class="malýBlok">
                 <h2>Nastavení</h2>
-                <p>Vítejte, v nastavení vašeho účtu, jste přihlášený jako: <span id="JménoUživatele"></span></p>
+                <p>Vítejte, v nastavení vašeho účtu, jste přihlášený jako: <span class="JménoUživatele"></span></p>
                 
             </div>
             <div class="malýBlok">
                 <h2>Změna hesla</h2>
-                <p></p>
+                <p>Změnte si vaše heslo</p>
+                <form class="nastaveniFormul">
+                    <h3>Účet: <span class="JménoUživatele"></span></h3>
+                    <label>heslo: </label><input type="text"><br>
+                    <label>nové heslo: </label><input type="text">  <br>                  
+                    <label>nové heslo znovu: </label><input type="text">
+                </form>
+                <button>Potvrdit</button>
 
             </div> 
             <div class="malýBlok">
-                <h2>Odstranit účet</h2>
-                <p></p>
-
+                <p>Odstraňte váš účet</p>
+                <form class="nastaveniFormul">
+                    <h3>Účet: <span class="JménoUživatele"></span></h3>
+                    <label>heslo: </label><input type="text"> <br>             
+                    <label>heslo znovu: </label><input type="text"><br>
+                </form>
+                <button>Potvrdit</button>
+                <p id="Pozor">Pozor tato akce nelze vrátit, přijdete o veškeré záznamy.</p>
             </div>   
         
         </div>
