@@ -177,9 +177,9 @@ button{
 
 button:hover{
     color: rgb(4, 255, 197);
-    border: 2px solid rgb(251, 0, 255);
-    transition: 0.5s;
-    background-image: radial-gradient(rgb(20, 21, 60), rgba(26, 10, 43, 0.72));
+    border: 2px solid rgb(247, 81, 250);
+    transition: 0.4s;
+    background-image: radial-gradient(rgb(44, 0, 163), rgba(44, 24, 54, 0.72));
     scale: 1.03;
 }
 
@@ -391,7 +391,7 @@ main h2{
 
 #Pozor{
     color: red;
-    background-image: linear-gradient(to bottom, rgb(255, 191, 244), rgb(255, 205, 217));
+    background-image: linear-gradient(to bottom, rgb(251, 180, 255), rgb(255, 201, 201));
     padding: 1px;
     border: 1px solid rgb(255, 63, 63);
     border-radius: 6px;

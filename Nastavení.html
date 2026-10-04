@@ -17,29 +17,39 @@
         <div class="VelkýBlok" id="DomovskýBlok">
             <div class="malýBlok">
                 <h2>Nastavení</h2>
-                <p>Vítejte, v nastavení vašeho účtu, jste přihlášený jako: <span class="JménoUživatele"></span></p>
+                <p>Vítejte, v nastavení vašeho účtu, jste přihlášený jako: <span class="JménoUživatele"></span>.
+                    Zde můžete změnit vaše heslo, po případě odstranit váš účet z našich stránek.
+                </p>
                 
             </div>
             <div class="malýBlok">
                 <h2>Změna hesla</h2>
-                <p>Změnte si vaše heslo</p>
-                <form class="nastaveniFormul">
+                <p>Změnte si vaše heslo.</p>
+                <form class="nastaveniFormul" id="ZměnaHeslaForm">
                     <h3>Účet: <span class="JménoUživatele"></span></h3>
-                    <label>heslo: </label><input type="text"><br>
-                    <label>nové heslo: </label><input type="text">  <br>                  
-                    <label>nové heslo znovu: </label><input type="text">
+                    <label for="AktuálníHeslo">Heslo:</label>
+                    <input id="AktuálníHeslo" type="password" autocomplete="current-password" required>
+                    <label for="NovéHeslo">Nové heslo:</label>
+                    <input id="NovéHeslo" type="password" autocomplete="new-password" required>
+                    <label for="NovéHesloZnovu">Nové heslo znovu:</label>
+                    <input id="NovéHesloZnovu" type="password" autocomplete="new-password" required>
+                    <p class="formChyba" id="ZměnaHeslaZpráva" role="alert" aria-live="polite"></p>
+                    <button type="submit">Potvrdit</button>
                 </form>
-                <button>Potvrdit</button>
 
             </div> 
             <div class="malýBlok">
-                <p>Odstraňte váš účet</p>
-                <form class="nastaveniFormul">
+                <h2>Odstranit účet</h2>
+                <p>Odstraňte váš účet a veškerá data.</p>
+                <form class="nastaveniFormul" id="OdstraněníÚčtuForm">
                     <h3>Účet: <span class="JménoUživatele"></span></h3>
-                    <label>heslo: </label><input type="text"> <br>             
-                    <label>heslo znovu: </label><input type="text"><br>
+                    <label for="HesloProOdstranění">Heslo:</label>
+                    <input id="HesloProOdstranění" type="password" autocomplete="current-password" required>
+                    <label for="HesloProOdstraněníZnovu">Heslo znovu:</label>
+                    <input id="HesloProOdstraněníZnovu" type="password" autocomplete="current-password" required>
+                    <p class="formChyba" id="OdstraněníÚčtuZpráva" role="alert" aria-live="polite"></p>
+                    <button type="submit">Odstranit účet</button>
                 </form>
-                <button>Potvrdit</button>
                 <p id="Pozor">Pozor tato akce nelze vrátit, přijdete o veškeré záznamy.</p>
             </div>   
         
