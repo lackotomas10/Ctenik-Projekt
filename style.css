@@ -321,7 +321,7 @@ button:active{
 #SoutěžTabulka{
     border: 2px solid white;
     border-radius: 9px;
-    background-color: rgb(50, 0, 96);
+    background-image: radial-gradient( rgb(77, 0, 136), rgb(0, 41, 117));
     align-self: center;
 }
 
@@ -332,12 +332,13 @@ button:active{
 }
 
 .Hlava{
-    background-color: rgb(4, 255, 197);
+    background-image: linear-gradient(to bottom, rgb(4, 255, 167), rgb(4, 255, 238));
     color: rgb(120, 0, 232);
     border-radius: 2px;
-    border: 1px solid rgb(173, 0, 221);
+    border: 1px solid rgb(139, 15, 255);
     padding: 2px;
     margin-bottom: 2px;
+    border-radius: 6px;
 }
 
 .Řádek{
@@ -381,4 +382,9 @@ p{
     top: -55px; 
     margin-bottom: -100px; 
     vertical-align: middle
+}
+
+h2{
+    text-decoration: underline 3px rgba(11, 225, 168, 0.955);
+    text-decoration-skip-ink: none;
 }
