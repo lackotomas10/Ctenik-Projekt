@@ -389,13 +389,13 @@ main h2{
     text-decoration-skip-ink: none;
 }
 
-#Pozor{
+.Pozor{
     color: red;
     background-image: linear-gradient(to bottom, rgb(251, 180, 255), rgb(255, 201, 201));
     padding: 1px;
     border: 1px solid rgb(255, 63, 63);
     border-radius: 6px;
-    width: 90%;
+    width: 60%;
 }
 
 .nastaveniFormul{
@@ -411,5 +411,13 @@ main h2{
 
 .nastaveniFormul input{
     display: flex;
+
+}
+
+
+.nastaveniTlacitko{
+    margin: 1px;
+    width: 120px;
+    background-image: linear-gradient(to bottom, rgb(52, 8, 173), rgb(9, 77, 74));
 
 }
