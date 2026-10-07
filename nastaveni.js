@@ -48,6 +48,123 @@ const formulářOdstraněníÚčtu = document.getElementById('OdstraněníÚčtu
 
 formulářZměnyHesla.addEventListener('submit', ZměnitHeslo)
 formulářOdstraněníÚčtu.addEventListener('submit', OdstranitÚčet)
+document.getElementById('SmazatPosledniZaznam').addEventListener('click', SmazatPosledniZaznam)
+document.getElementById('SoutezTlacitko').addEventListener('click', PřepnoutSoutěž)
+document.getElementById('AktualizovatData').addEventListener('click', AktualizovatData)
+document.getElementById('SmazatVsechnyZaznamy').addEventListener('click', SmazatVsechnyZaznamy)
+AktualizovatTextSoutěže()
+
+function KlíčZáznamůUživatele(){
+    return `${předponaZáznamů}${klíčJména}`
+}
+
+function NačístZáznamy(){
+    const klíč = KlíčZáznamůUživatele()
+    const uloženéZáznamy = localStorage.getItem(klíč)
+    if (uloženéZáznamy) {
+        const záznamy = JSON.parse(uloženéZáznamy)
+        if (!záznamy || typeof záznamy !== 'object' || Array.isArray(záznamy)) {
+            throw new Error('Záznamy mají neplatný formát.')
+        }
+        return { klíč, záznamy }
+    }
+
+    if (platnýStarýÚčet) {
+        const staréZáznamy = localStorage.getItem(klíčStarýchZáznamů)
+        if (staréZáznamy) {
+            const záznamy = JSON.parse(staréZáznamy)
+            if (!záznamy || typeof záznamy !== 'object' || Array.isArray(záznamy)) {
+                throw new Error('Staré záznamy mají neplatný formát.')
+            }
+            return { klíč: klíčStarýchZáznamů, záznamy }
+        }
+    }
+
+    return { klíč, záznamy: {} }
+}
+
+function ZobrazitRychlouZprávu(text){
+    document.getElementById('RychleZmenyZprava').textContent = text
+}
+
+function SmazatPosledniZaznam(){
+    if (!aktivníÚčet) {
+        ZobrazitRychlouZprávu('Pro úpravu záznamů se nejprve přihlaste.')
+        return
+    }
+
+    try {
+        const { klíč, záznamy } = NačístZáznamy()
+        const datum = Object.keys(záznamy).sort().pop()
+        if (!datum) {
+            ZobrazitRychlouZprávu('Nemáte žádné záznamy ke smazání.')
+            return
+        }
+
+        delete záznamy[datum]
+        if (Object.keys(záznamy).length) {
+            localStorage.setItem(klíč, JSON.stringify(záznamy))
+        } else {
+            localStorage.removeItem(klíč)
+        }
+        ZobrazitRychlouZprávu(`Záznam ze dne ${datum} byl smazán.`)
+    } catch {
+        ZobrazitRychlouZprávu('Záznam se nepodařilo smazat.')
+    }
+}
+
+function SmazatVsechnyZaznamy(){
+    if (!aktivníÚčet) {
+        ZobrazitRychlouZprávu('Pro úpravu záznamů se nejprve přihlaste.')
+        return
+    }
+    if (!window.confirm('Opravdu chcete smazat všechny své záznamy? Tuto akci nelze vrátit.')) return
+
+    try {
+        localStorage.removeItem(KlíčZáznamůUživatele())
+        if (platnýStarýÚčet) localStorage.removeItem(klíčStarýchZáznamů)
+        ZobrazitRychlouZprávu('Všechny vaše záznamy byly smazány.')
+    } catch {
+        ZobrazitRychlouZprávu('Záznamy se nepodařilo smazat.')
+    }
+}
+
+function AktualizovatTextSoutěže(){
+    document.getElementById('SoutezTlacitko').textContent =
+        aktivníÚčet?.soutěžící === false ? 'Vrátit se do soutěže' : 'Odejít ze soutěže'
+}
+
+function PřepnoutSoutěž(){
+    if (!aktivníÚčet) {
+        ZobrazitRychlouZprávu('Pro změnu účasti v soutěži se nejprve přihlaste.')
+        return
+    }
+
+    try {
+        const aktualizovanýÚčet = {
+            ...aktivníÚčet,
+            soutěžící: aktivníÚčet.soutěžící === false
+        }
+        const aktualizovanéÚčty = { ...účty, [klíčJména]: aktualizovanýÚčet }
+        localStorage.setItem(klíčÚčtů, JSON.stringify(aktualizovanéÚčty))
+        if (platnýStarýÚčet) {
+            localStorage.setItem(klíčStaréhoÚčtu, JSON.stringify(aktualizovanýÚčet))
+            Object.assign(platnýStarýÚčet, aktualizovanýÚčet)
+        }
+        Object.assign(účty, aktualizovanéÚčty)
+        aktivníÚčet = aktualizovanýÚčet
+        AktualizovatTextSoutěže()
+        ZobrazitRychlouZprávu(
+            aktivníÚčet.soutěžící ? 'Znovu jste se připojili do soutěže.' : 'Ze soutěže jste odešli.'
+        )
+    } catch {
+        ZobrazitRychlouZprávu('Účast v soutěži se nepodařilo změnit.')
+    }
+}
+
+function AktualizovatData(){
+    window.location.href = 'Ctenik.html'
+}
 
 function ZměnitHeslo(event){
     event.preventDefault()

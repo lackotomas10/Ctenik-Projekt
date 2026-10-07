@@ -181,6 +181,7 @@ button:hover{
     transition: 0.4s;
     background-image: radial-gradient(rgb(44, 0, 163), rgba(44, 24, 54, 0.72));
     scale: 1.03;
+
 }
 
 button:active{
@@ -353,6 +354,16 @@ button:active{
     border-radius: 6px;
     border: 0.1px solid blue;
     text-align:center;
+    transition: 0.2s;
+}
+
+.Buňka:hover{
+    background-image: linear-gradient(to bottom, rgb(46, 249, 218), rgb(46, 215, 249));
+    color: rgb(113, 3, 217);
+    border-radius: 6px;
+    border: 1px solid rgb(255, 179, 0);
+    text-align:center;
+    transition: 0.3s;
 }
 
 p{
@@ -417,7 +428,7 @@ main h2{
 
 .nastaveniTlacitko{
     margin: 1px;
-    width: 120px;
-    background-image: linear-gradient(to bottom, rgb(52, 8, 173), rgb(9, 77, 74));
-
+    margin-bottom: 1px;
+    width: 100%;
+    max-width: 150px;
 }

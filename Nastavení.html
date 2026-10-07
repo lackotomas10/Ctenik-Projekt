@@ -18,14 +18,15 @@
             <div class="malýBlok">
                 <h2>Nastavení</h2>
                 <p>Vítejte, v nastavení vašeho účtu, jste přihlášený jako: <span class="JménoUživatele"></span>.
-                    Zde můžete změnit vaše heslo, po případě odstranit váš účet z našich stránek.
+                    Toto je prostor můžete změnit vaše heslo, po případě odstranit váš účet z našich stránek, mazat záznamy a měnit jiné věci ohledně vašeho účtu.
                 </p>
                 <h3>Rychlé změny:</h3>
                 <div class="nastaveniFormul">
-                    <button class="nastaveniTlacitko">Smazat poslední záznam</button>
-                    <button class="nastaveniTlacitko">Odejít z soutěže</button><!-- Pokud je uživatel již mimo soutěž tak toto tlačítko bude pro připojení zpět -->
-                    <button class="nastaveniTlacitko">placeholderplaceholder</button><!-- Doplnit -->
-                    <button class="nastaveniTlacitko">Vymazat veškeré záznamy</button>
+                    <button id="SmazatPosledniZaznam" class="nastaveniTlacitko" type="button">Smazat poslední záznam</button>
+                    <button id="SoutezTlacitko" class="nastaveniTlacitko" type="button">Odejít ze soutěže</button>
+                    <button id="AktualizovatData" class="nastaveniTlacitko" type="button">Aktualizovat data</button>
+                    <button id="SmazatVsechnyZaznamy" class="nastaveniTlacitko" type="button">Vymazat veškeré záznamy</button>
+                    <p id="RychleZmenyZprava" class="formChyba" role="status" aria-live="polite"></p>
 
                 </div>
                 <p class="Pozor">Varujeme nětkeré změny nelze vrátit. </p>
@@ -59,7 +60,7 @@
                     <p class="formChyba" id="OdstraněníÚčtuZpráva" role="alert" aria-live="polite"></p>
                     <button type="submit">Odstranit účet</button>
                 </form>
-                <p class="Pozor">Pozor tato akce nelze vrátit, přijdete o veškeré záznamy.</p>
+                <p class="Pozor">Pozor tato akce nelze vrátit, přijdete o veškeré záznamy. Po dokonční vás automaticky odhlásíme.</p>
             </div>   
         
         </div>

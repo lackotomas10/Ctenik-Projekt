@@ -54,7 +54,11 @@ function PočetDníVŘadě(záznamy){
 function VykreslitSoutěž(){
     const účty = NačístJSON(klíčÚčtů, {})
     const soutěžící = Object.values(účty && typeof účty === 'object' ? účty : {})
-        .filter(účet => typeof účet?.jméno === 'string' && účet.jméno.trim())
+        .filter(účet =>
+            typeof účet?.jméno === 'string' &&
+            účet.jméno.trim() &&
+            účet.soutěžící !== false
+        )
         .map(účet => {
             const jméno = účet.jméno
             const záznamy = NačístJSON(`${předponaZáznamů}${NormalizovatJméno(jméno)}`, {})
