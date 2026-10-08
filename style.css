@@ -134,7 +134,10 @@ footer .Odkaz{
     display: flex;
     justify-content: center;
     text-align: center;
-    transition: 0.5s;
+    transition: 0.9s;
+
+    width: 20%;
+    max-width: 120px;
 }
 
 footer .Odkaz[hidden]{
@@ -157,14 +160,29 @@ footer .Odkaz h3{
 footer .OdkazObr{
     height: 60px;
     width: 60px;
+    transition: 0.5s;
 }
-    .OdkazObr:hover{
-        transition: 0.5s;
-        scale: 1.06;
-    }
-    .OdkazObr:active{
-        scale: 0.9; 
-    }
+
+.OdkazObr:hover{
+    transition: 0.5s;
+    scale: 1.06;
+    rotate: 1deg;
+    transform: translateY(-3px);
+}
+
+#NastaveníObr{
+    transition: 0.5s;
+}
+
+#NastaveníObr:hover{
+    transform: translateY(0px);
+    rotate: 180deg;
+    transition: 0.5s;
+}
+
+.OdkazObr:active{
+    scale: 0.9; 
+}
 
 button{
     color: white;

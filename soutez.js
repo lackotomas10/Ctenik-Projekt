@@ -135,3 +135,15 @@ window.addEventListener('storage', event => {
         VykreslitSoutěž()
     }
 })
+
+
+function DoNastavení() {
+    const klíčPřihlášenéhoUživatele = 'ctenikPrihlasenýUživatel'
+
+    if (sessionStorage.getItem(klíčPřihlášenéhoUživatele) || localStorage.getItem(klíčPřihlášenéhoUživatele)) {
+        window.location.href = 'Nastavení.html#SoutezTlacitko'
+    }
+    else{
+        alert("Nejprve se musíte přihláxit.")
+    }
+}
