@@ -285,8 +285,67 @@ function Aktualizace(){
     document.getElementById('MinutyZaDen').innerText = 'Minuty za den: ' + minutyZaDen.toLocaleString('cs-CZ', { maximumFractionDigits: 1 })
     document.getElementById('PočKnih').innerText = 'Přečtené knihy: ' + knihyCelkem
     AktualizovatŘadu(záznamy)
+    AktualizovatPoziciVLize()
     VykreslitGraf(záznamy)
 }
+
+function AktualizovatPoziciVLize(){
+    const aktuálníÚčty = NačístÚčty()
+    const záznamyUživatelů = Object.values(aktuálníÚčty)
+        .filter(účet =>
+            typeof účet?.jméno === 'string' &&
+            účet.jméno.trim() &&
+            účet.soutěžící !== false
+        )
+        .map(účet => {
+            let záznamy = {}
+            try {
+                const uloženéZáznamy = localStorage.getItem(`${klíčZáznamů}:${NormalizovatJméno(účet.jméno)}`)
+                const načtenéZáznamy = JSON.parse(uloženéZáznamy || '{}')
+                if (načtenéZáznamy && typeof načtenéZáznamy === 'object' && !Array.isArray(načtenéZáznamy)) {
+                    záznamy = načtenéZáznamy
+                }
+            } catch {
+                záznamy = {}
+            }
+
+            const minuty = Object.values(záznamy).reduce((celkem, záznam) => {
+                const hodnota = Number(záznam?.minuty)
+                return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
+            }, 0)
+            const dnes = new Date()
+            const datumDnes = `${dnes.getFullYear()}-${String(dnes.getMonth() + 1).padStart(2, '0')}-${String(dnes.getDate()).padStart(2, '0')}`
+            let datumŘady = (Number(záznamy[datumDnes]?.minuty) || 0) > 0
+                ? datumDnes
+                : DatumPosunout(datumDnes, -1)
+            let dnyVŘadě = 0
+
+            while ((Number(záznamy[datumŘady]?.minuty) || 0) > 0) {
+                dnyVŘadě++
+                datumŘady = DatumPosunout(datumŘady, -1)
+            }
+
+            return { jméno: účet.jméno, minuty, dnyVŘadě }
+        })
+        .sort((první, druhý) =>
+            druhý.minuty - první.minuty ||
+            druhý.dnyVŘadě - první.dnyVŘadě ||
+            první.jméno.localeCompare(druhý.jméno, 'cs-CZ')
+        )
+
+    const pozice = záznamyUživatelů.findIndex(účet =>
+        NormalizovatJméno(účet.jméno) === NormalizovatJméno(PřihlášenýUživatel)
+    )
+    document.getElementById('PoziceVLizeHodnota').innerText = pozice < 0
+        ? 'Nejste zařazeni do ligy. Účast můžete zapnout v nastavení.'
+        : `${pozice + 1}. místo z ${záznamyUživatelů.length}`
+}
+
+window.addEventListener('storage', event => {
+    if (event.key === klíčÚčtů || event.key?.startsWith(`${klíčZáznamů}:`)) {
+        if (Přihlášení) AktualizovatPoziciVLize()
+    }
+})
 
 window.addEventListener('resize', () => {
     if (Přihlášení) VykreslitGraf(NačístZáznamy())

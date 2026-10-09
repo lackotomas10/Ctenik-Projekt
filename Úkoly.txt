@@ -1,5 +1,5 @@
 Seznam úkolů
-    1 Dokončit pravidla soutěže (sezóny?, remízy, úpravy záznamů)
+    1 Dokončit pravidla soutěže (sezóny, remízy)✅
     2 Vyřešit soukromí a zásady ochrany osobních údajů (Privacy policy, mazání účtu)
     3 Dodělat design pro všechna zařízení a přístupnost
     4 Vybrat databázi a navrhnout přístupová pravidla (doporučení Supabase/PostgreSQL)

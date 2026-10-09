@@ -229,6 +229,24 @@ button:active{
     
 }
 
+#PoziceVLize{
+    margin-top: -11px;
+    margin-bottom: -11px;
+    margin-left: -9px;
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    border-radius: 6px;
+    padding: 0 10px;
+    max-width: 290px;
+}
+
+#PoziceVLizeHodnota{
+    color: rgb(255, 192, 20);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
 #Graf{
     display: block;
     width: 100%;
