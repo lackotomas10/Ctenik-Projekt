@@ -141,7 +141,7 @@ function DoNastavení() {
     const klíčPřihlášenéhoUživatele = 'ctenikPrihlasenýUživatel'
 
     if (sessionStorage.getItem(klíčPřihlášenéhoUživatele) || localStorage.getItem(klíčPřihlášenéhoUživatele)) {
-        window.location.href = 'Nastavení.html#SoutezTlacitko'
+        window.location.href = 'Nastavení.html#SoutezTlacitko#SmazatPosledniZaznam'
     }
     else{
         alert("Nejprve se musíte přihláxit.")

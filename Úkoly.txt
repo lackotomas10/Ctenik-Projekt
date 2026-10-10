@@ -8,6 +8,7 @@ Seznam úkolů
     7 Připravit hosting a provoz (HTTPS, zálohy a obnova)
     8 Finální testování
     9 Publikace
-    10 Analytika a úklid struktury (volitelně po spuštění)
+    10 Analytika a úklid struktury (volitelně po spuštění, aktualizovat Privacy policy)
+
 
 Pro splněné:✅
