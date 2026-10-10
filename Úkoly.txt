@@ -1,8 +1,8 @@
 Seznam úkolů
     1 Dokončit pravidla soutěže (sezóny, remízy)✅
-    2 Vyřešit soukromí a zásady ochrany osobních údajů (Privacy policy, mazání účtu)
+    2 Vyřešit soukromí a zásady ochrany osobních údajů (Privacy policy, mazání účtu)✅
     3 Dodělat design pro všechna zařízení a přístupnost
-    4 Vybrat databázi a navrhnout přístupová pravidla (doporučení Supabase/PostgreSQL)
+    4 Vybrat databázi a navrhnout přístupová pravidla (doporučení Supabase/PostgreSQL soukromí a zásady)
     5 Zabezpečit účty (Supabase Auth, žádná hesla v localStorage)
     6 Přesunout data z localStorage do databáze (umožnit přenos záznamů, ne hesel)
     7 Připravit hosting a provoz (HTTPS, zálohy a obnova)

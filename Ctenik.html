@@ -74,9 +74,15 @@
             </div>
             <div class="malýBlok" id="Statistiky">
                 <h2>Statistiky:</h2>
-                <h3 id="Minuty">Minuty čtení: 0</h3>
-                <h3 id="MinutyZaDen">Minuty za den: 0</h3>
-                <canvas id="Graf" aria-label="Graf minut čtení za posledních sedm dní"></canvas>
+                <div id="StatistikyData">
+                    <h3 id="Minuty">Minuty čtení: 0</h3>
+                    <h3 id="MinutyZaDen">Minuty za den: 0</h3>
+                    <canvas id="Graf" aria-label="Graf minut čtení za posledních sedm dní"></canvas>
+                    <div id="StatistikyOmezení" hidden>
+                        <p>Po přihlášení budou dostupné vaše statistiky.</p>
+                        <button type="button" onclick="Přihlásit()">Přihlásit se</button>
+                    </div>
+                </div>
             </div>
             <div class="malýBlok" id="Přispět">
                 <h2>Záznam</h2>

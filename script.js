@@ -259,13 +259,15 @@ function RegistraceOdeslat(event){
 function Aktualizace(){
     document.getElementById('PřihlášeníVýzva').hidden = Přihlášení
     document.getElementById('Přehled').hidden = !Přihlášení
-    document.getElementById('Statistiky').hidden = !Přihlášení
+    document.getElementById('Statistiky').hidden = false
+    document.getElementById('StatistikyOmezení').hidden = Přihlášení
     document.getElementById('NastaveníOdkaz').hidden = !Přihlášení
     if (!Přihlášení) {
         document.getElementById('AlarmPřihlášení').innerText = 'Nejste přihlášni, většina funkcí nebude aktivní'
         document.getElementById('AlarmPřihlášení').style.color = 'red'
         document.getElementById('AlarmPřihlášení').style.backgroundColor = 'rgb(255, 151, 151)'
         document.getElementById('AlarmPřihlášení').style.borderRadius = '5px'
+        ZobrazitUkázkovéStatistiky()
         return
     }
 
@@ -287,6 +289,23 @@ function Aktualizace(){
     AktualizovatŘadu(záznamy)
     AktualizovatPoziciVLize()
     VykreslitGraf(záznamy)
+}
+
+function ZobrazitUkázkovéStatistiky(){
+    const ukázkovéMinuty = [20, 35, 15, 45, 30, 60, 40]
+    const ukázkovéZáznamy = Object.fromEntries(
+        ukázkovéMinuty.map((minuty, index) => [
+            DatumPosunout(dnešníDatum, index - 6),
+            { minuty }
+        ])
+    )
+    const minutyCelkem = ukázkovéMinuty.reduce((součet, minuty) => součet + minuty, 0)
+    const minutyZaDen = minutyCelkem / ukázkovéMinuty.length
+
+    document.getElementById('Minuty').innerText = `Minuty čtení: ${minutyCelkem}`
+    document.getElementById('MinutyZaDen').innerText =
+        `Průměr minut čtení za den: ${minutyZaDen.toLocaleString('cs-CZ', { maximumFractionDigits: 1 })}`
+    VykreslitGraf(ukázkovéZáznamy)
 }
 
 function AktualizovatPoziciVLize(){
@@ -313,8 +332,18 @@ function AktualizovatPoziciVLize(){
                 const hodnota = Number(záznam?.minuty)
                 return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
             }, 0)
+            const knihy = Object.values(záznamy).reduce((celkem, záznam) => {
+                const hodnota = Number(záznam?.knihy)
+                return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
+            }, 0)
             const dnes = new Date()
             const datumDnes = `${dnes.getFullYear()}-${String(dnes.getMonth() + 1).padStart(2, '0')}-${String(dnes.getDate()).padStart(2, '0')}`
+            const minutyZaPosledníchSedmDní = Array.from({ length: 7 }, (_, index) =>
+                DatumPosunout(datumDnes, index - 6)
+            ).reduce((celkem, datum) => {
+                const hodnota = Number(záznamy[datum]?.minuty)
+                return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
+            }, 0)
             let datumŘady = (Number(záznamy[datumDnes]?.minuty) || 0) > 0
                 ? datumDnes
                 : DatumPosunout(datumDnes, -1)
@@ -325,11 +354,19 @@ function AktualizovatPoziciVLize(){
                 datumŘady = DatumPosunout(datumŘady, -1)
             }
 
-            return { jméno: účet.jméno, minuty, dnyVŘadě }
+            return {
+                jméno: účet.jméno,
+                minuty,
+                dnyVŘadě,
+                knihy,
+                průměrZaPosledníchSedmDní: minutyZaPosledníchSedmDní / 7
+            }
         })
         .sort((první, druhý) =>
             druhý.minuty - první.minuty ||
             druhý.dnyVŘadě - první.dnyVŘadě ||
+            druhý.knihy - první.knihy ||
+            druhý.průměrZaPosledníchSedmDní - první.průměrZaPosledníchSedmDní ||
             první.jméno.localeCompare(druhý.jméno, 'cs-CZ')
         )
 

@@ -61,16 +61,37 @@ function VykreslitSoutěž(){
         )
         .map(účet => {
             const jméno = účet.jméno
-            const záznamy = NačístJSON(`${předponaZáznamů}${NormalizovatJméno(jméno)}`, {})
+            const uloženéZáznamy = NačístJSON(`${předponaZáznamů}${NormalizovatJméno(jméno)}`, {})
+            const záznamy = uloženéZáznamy && typeof uloženéZáznamy === 'object' && !Array.isArray(uloženéZáznamy)
+                ? uloženéZáznamy
+                : {}
+            const všechnyZáznamy = Object.values(záznamy)
+            const knihy = všechnyZáznamy.reduce((celkem, záznam) => {
+                const počet = Number(záznam?.knihy)
+                return celkem + (Number.isFinite(počet) && počet > 0 ? počet : 0)
+            }, 0)
+            const dnes = new Date()
+            const dnešníDatum = `${dnes.getFullYear()}-${String(dnes.getMonth() + 1).padStart(2, '0')}-${String(dnes.getDate()).padStart(2, '0')}`
+            const minutyZaPosledníchSedmDní = Array.from({ length: 7 }, (_, index) =>
+                DatumPosunout(dnešníDatum, index - 6)
+            ).reduce((celkem, datum) => {
+                const minuty = Number(záznamy[datum]?.minuty)
+                return celkem + (Number.isFinite(minuty) && minuty > 0 ? minuty : 0)
+            }, 0)
+
             return {
                 jméno,
                 minuty: NačístMinuty(jméno),
-                dnyVŘadě: PočetDníVŘadě(záznamy)
+                dnyVŘadě: PočetDníVŘadě(záznamy),
+                knihy,
+                průměrZaPosledníchSedmDní: minutyZaPosledníchSedmDní / 7
             }
         })
         .sort((první, druhý) =>
             druhý.minuty - první.minuty ||
             druhý.dnyVŘadě - první.dnyVŘadě ||
+            druhý.knihy - první.knihy ||
+            druhý.průměrZaPosledníchSedmDní - první.průměrZaPosledníchSedmDní ||
             první.jméno.localeCompare(druhý.jméno, 'cs-CZ')
         )
 
