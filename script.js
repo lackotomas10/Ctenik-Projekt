@@ -24,11 +24,6 @@ document.getElementById('PřihlášeníOkno').addEventListener('click', (event) 
 })
 
 function Záznam(){
-    if (Přihlášení == false){
-        alert("Nejprve se přihlašte.")
-        Aktualizace()
-        return
-    }
     const datum = document.getElementById('Datum').value
     const minuty = Number(document.getElementById('MinČtení').value)
     if (!datum || !Number.isFinite(minuty) || minuty < 0 || minuty > 1440) {
@@ -184,7 +179,6 @@ function Přihlásit(){
         return
     }
     document.getElementById('PřihlášeníOkno').hidden = false
-
     document.getElementById('PřihlašovacíJméno').focus()
 }
 
@@ -263,6 +257,8 @@ function Aktualizace(){
     document.getElementById('StatistikyOmezení').hidden = Přihlášení
     document.getElementById('NastaveníOdkaz').hidden = !Přihlášení
     if (!Přihlášení) {
+        document.getElementById("ZáznTlačítko").classList.add("ZakázanéTlačítko")
+        document.getElementById("ZáznTlačítko").onclick = null
         document.getElementById('AlarmPřihlášení').innerText = 'Nejste přihlášni, většina funkcí nebude aktivní'
         document.getElementById('AlarmPřihlášení').style.color = 'red'
         document.getElementById('AlarmPřihlášení').style.backgroundColor = 'rgb(255, 151, 151)'
@@ -271,7 +267,12 @@ function Aktualizace(){
         ZobrazitUkázkovéStatistiky()
         return
     }
+    if(Přihlášení)
 
+    {
+        document.getElementById("ZáznTlačítko").classList.remove("ZakázanéTlačítko")
+        document.getElementById("ZáznTlačítko").onclick = function() { Záznam() }
+    }
     const záznamy = NačístZáznamy()
     const dny = Object.values(záznamy)
     const minutyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.minuty) || 0), 0)
