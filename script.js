@@ -31,8 +31,8 @@ function Záznam(){
     }
     const datum = document.getElementById('Datum').value
     const minuty = Number(document.getElementById('MinČtení').value)
-    if (!datum || !Number.isFinite(minuty) || minuty < 0) {
-        alert('Zadejte platné datum a počet minut (alespoň 0).')
+    if (!datum || !Number.isFinite(minuty) || minuty < 0 || minuty > 1440) {
+        alert('Zadejte platné datum a počet minut (alespoň 0, maximálně 1440).')
         return
     }
 
@@ -267,6 +267,7 @@ function Aktualizace(){
         document.getElementById('AlarmPřihlášení').style.color = 'red'
         document.getElementById('AlarmPřihlášení').style.backgroundColor = 'rgb(255, 151, 151)'
         document.getElementById('AlarmPřihlášení').style.borderRadius = '5px'
+        document.getElementById('AlarmPřihlášení').style.margin = '5px'
         ZobrazitUkázkovéStatistiky()
         return
     }

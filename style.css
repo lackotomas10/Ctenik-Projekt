@@ -24,6 +24,7 @@ header{
     background-image: linear-gradient(to bottom, rgb(0, 5, 139), rgb(93, 0, 187));
     border-radius: 11px;
     padding: 5px;
+    border: 0.3px solid rgba(0, 221, 255, 0.624);
 }
 
 #Nadpis{
@@ -48,6 +49,7 @@ header{
     background-image: linear-gradient(to bottom, rgb(0, 5, 139), rgb(93, 0, 187));
     border-radius: 11px;
     padding: 5px;
+    margin-bottom: 9px;
 }
 
 #DomovskýBlok{
@@ -73,6 +75,7 @@ header{
     padding-left: 12px;
     margin: 2px;
     max-width: 520px;
+    border: 0.3px solid rgba(0, 221, 255, 0.624);
 
 }
 
@@ -93,6 +96,12 @@ input{
     outline: none;
 }
 
+input:focus{
+    border: 2px solid rgb(200, 253, 253);
+    outline: 2px solid rgba(8, 255, 251, 0.866);
+    box-shadow: 0px 0px 9px 7px rgba(45, 255, 195, 0.13);
+}
+
 input[type="checkbox"]{
     min-width: 20px;
     appearance: none;
@@ -101,7 +110,7 @@ input[type="checkbox"]{
     margin: 0;
     border: 2px solid rgb(4, 255, 197);
     border-radius: 5px;
-    background-color: rgb(216, 237, 255);
+    background-color: rgba(216, 253, 255, 0.035);
     vertical-align: middle;
     cursor: pointer;
 }
@@ -110,17 +119,13 @@ input[type="checkbox"]:checked{
     background-color: rgb(4, 255, 197);
 }
 
-input[type="checkbox"]:focus-visible{
-    outline: 2px solid rgb(251, 0, 255);
-    outline-offset: 2px;
-}
-
 footer{
     display: flex;
     justify-content: center;
     background-image: linear-gradient(to bottom, rgb(0, 2, 63), rgb(27, 0, 55));
     border-radius: 11px;
     padding: 5px;
+    border: 0.2px solid rgba(0, 255, 191, 0.511);
 }
 
 footer nav{
@@ -135,7 +140,6 @@ footer .Odkaz{
     justify-content: center;
     text-align: center;
     transition: 0.9s;
-
     width: 20%;
     max-width: 120px;
 }
@@ -197,9 +201,9 @@ button:hover{
     color: rgb(4, 255, 197);
     border: 2px solid rgb(247, 81, 250);
     transition: 0.4s;
-    background-image: radial-gradient(rgb(44, 0, 163), rgba(44, 24, 54, 0.72));
+    background-image: radial-gradient(rgb(44, 0, 163), rgba(44, 0, 72, 0.72));
     scale: 1.03;
-
+    cursor: pointer ;
 }
 
 button:active{
@@ -229,8 +233,8 @@ button:active{
 }
 
 #PoziceVLize{
-    margin-top: -11px;
-    margin-bottom: -11px;
+    margin-top: -13px;
+    margin-bottom: -13px;
     margin-left: -9px;
     display: flex;
     align-items: baseline;
@@ -241,9 +245,15 @@ button:active{
 }
 
 #PoziceVLizeHodnota{
-    color: rgb(255, 192, 20);
+    color: rgb(254, 194, 28);
     font-weight: bold;
     white-space: nowrap;
+    transition: 0.3s;
+}
+#PoziceVLizeHodnota:hover{
+    color: rgb(236, 158, 12);
+    transition: 0.3s;
+    
 }
 
 #Graf{
@@ -383,7 +393,7 @@ button:active{
 .formChyba{
     min-height: 18px;
     margin: 4px 0 0;
-    color: rgb(255, 151, 151);
+    color: rgb(0, 220, 220);
     text-align: center;
 }
 
