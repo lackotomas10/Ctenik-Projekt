@@ -30,10 +30,12 @@ header{
 #Nadpis{
     text-align: center;
     font-size: 150%;
+    margin-top: 18px;
 }
 
 #Profil{
-    margin-left: 3%;
+    margin-top: 3px;
+    margin-right: 0.1%;
     background-color: white;
     height: 50px;
     width: 50px;
@@ -470,7 +472,7 @@ p{
 }
 
 main h2{
-    text-decoration: underline 3px rgba(11, 225, 168, 0.955);
+    text-decoration: underline 3px rgb(11, 225, 168);
     text-decoration-skip-ink: none;
 }
 
@@ -547,6 +549,7 @@ main h2{
 
     input{
     padding: 3px;
+    width: 27%;
     }
 
     input[type="checkbox"]{
@@ -557,10 +560,30 @@ main h2{
     button{
         height: 1.2;
         width: 1.2;
-        margin: 3px;
+        margin: 7px;
+        margin-top: 19px;
     }
 
     .nastaveniFormul{
-        padding: 1%;
+        padding: 2%;
     }
+
+    *{
+        font-size: 103%;
+    }
+
+    html{
+        scrollbar-width: none;
+    }
+
+    #Nadpis{
+    margin-top: 25px;
+    }
+
+    #Profil{
+        margin-right: 1.1%;
+        height: 75px;
+        width: 75px;
+    }
+
 }
