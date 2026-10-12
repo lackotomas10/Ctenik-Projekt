@@ -1,0 +1,52 @@
+ČTENÍK — PODKLAD PRO ZÁLOHU A MIGRACI DO SUPABASE
+
+ucty
+1
+: 
+{jméno: "1", heslo: "1"}
+matej
+: 
+{jméno: "matej", heslo: "miguel"}
+tom
+: 
+{jméno: "Tom", heslo: "a"}
+
+Záznamy tom
+
+2026-10-01
+: 
+{minuty: 30, knihy: 0}
+2026-10-06
+: 
+{minuty: 31, knihy: 0}
+2026-10-07
+: 
+{minuty: 10, knihy: 0}
+2026-10-08
+: 
+{minuty: 20, knihy: 0}
+2026-10-09
+: 
+{minuty: 10, knihy: 0}
+2026-10-10
+: 
+{minuty: 18, knihy: 0}
+2026-10-11
+: 
+{minuty: 31, knihy: 0}
+
+
+Záznamy matej
+
+2026-10-02
+: 
+{minuty: 40, knihy: 0}
+2026-10-03
+: 
+{minuty: 25, knihy: 1}
+2026-10-05
+: 
+{minuty: 10, knihy: 0}
+2026-10-11
+: 
+{minuty: 10, knihy: 0}
