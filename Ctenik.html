@@ -50,8 +50,8 @@
         <div class="VelkýBlok" id="DomovskýBlok">
             <div class="malýBlok" id="PřihlášeníVýzva" hidden>
                 <h2>Vítejte ve Čteníku!</h2>
-                <p><a class="BezOzdob" onclick="Přihlásit()">Přihlaste se nebo si vytvořte účet</a>, abyste mohli zaznamenávat své čtení a sledovat své statisiky a začít řadu. Odemknete i další funkce, jako soutěžení v lize čtenářů.
-                    <a class="BezOzdob" href="Soutěž.html">Tady</a> se můžete kouknout na tabulku soutěže bez přihlášení.
+                <p><a class="BezOzdob" onclick="Přihlásit()">Přihlaste se nebo si vytvořte účet</a>, abyste mohli zaznamenávat své čtení, sledovat statistiky a začít svou řadu. Zpřístupní se vám také další funkce, například soutěžení v lize čtenářů.
+                    Na tabulku soutěže se můžete <a class="BezOzdob" href="Soutěž.html">podívat</a> i bez přihlášení.
                 <a href="Zásadysokromi.html" class="BezOzdob">Zde</a> se můžete podívat na pravidla ochrany soukromí.
                 </p>
                 <button type="button" onclick="Přihlásit()">Přihlásit se</button>
@@ -68,8 +68,8 @@
                     <h3>Pozice v lize:</h3>
                     <p id="PoziceVLizeHodnota"></p>
                 </div>
-                <p>Vítáme Vás, ve čteníku! Přejeme vám zábavu při čtení a plynulý zážitek z našich stránek. <a class="BezOzdob" href="Soutěž.html">Tady</a> se můžete kouknout na tabulku soutěže.
-                 Klikněte <a class="BezOzdob" href="#Dočtení">sem </a> pro nový záznam. Vaše řada má aktuálně <span id="řadaAkt">0 dnů</span>, doufáme, že bude co nejdelší. 
+                <p>Vítáme vás ve Čteníku! Přejeme vám zábavu při čtení a příjemný zážitek z našich stránek. Na tabulku soutěže se můžete <a class="BezOzdob" href="Soutěž.html">podívat</a>.
+                 <a class="BezOzdob" href="#Dočtení">Klikněte sem</a> pro vytvoření nového záznamu. Vaše řada má aktuálně <span id="řadaAkt">0 dnů</span>. Doufáme, že bude co nejdelší.
                  <a class="BezOzdob" href="Soutěž.html#Onas">Zde</a> můžete najít více informací o nás.
                  <a href="Zásadysokromi.html" class="BezOzdob">Tady</a> se můžete podívat na pravidla ochrany soukromí.
                 </p>
@@ -92,8 +92,9 @@
                     <h3>Datum</h3>
                     <input type="date" id="Datum"> 
                     <h3>Počet minut</h3>
-                    <input type="number" id="MinČtení" value="30"><p>  <!-- Kontrola uživatelského vstupu -->
-                    <h3>Dočtení knihy</h3> <p>(zaškrtněte pokud jste dočetli knihu)</p>
+                    <input type="number" id="MinČtení" value="30">
+                    <h3>Dočtení knihy</h3>
+                    <p>Zaškrtněte, pokud jste dočetli knihu.</p>
                         <input id="Dočtení" type="checkbox">
                 </div>
                 <button id="ZáznTlačítko" onclick="Záznam()">Zaznamenat</button>
