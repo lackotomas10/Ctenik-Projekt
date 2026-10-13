@@ -1,170 +1,87 @@
-const klíčÚčtů = 'ctenikÚčty'
-const klíčStaréhoÚčtu = 'ctenikÚčet'
-const předponaZáznamů = 'ctenikZáznamy:'
+const config = window.CTENIK_SUPABASE_CONFIG
+const client = window.supabase?.createClient && config?.url && config?.publicKey
+    ? window.supabase.createClient(config.url, config.publicKey)
+    : null
 
-function NormalizovatJméno(jméno){
-    return jméno.trim().toLocaleLowerCase('cs-CZ')
-}
+const výsledky = document.getElementById('VýsledkySoutěže')
 
-function NačístJSON(klíč, výchozíHodnota){
-    try {
-        return JSON.parse(localStorage.getItem(klíč) || JSON.stringify(výchozíHodnota))
-    } catch {
-        return výchozíHodnota
-    }
-}
-
-function NačístMinuty(jméno){
-    const záznamy = NačístJSON(`${předponaZáznamů}${NormalizovatJméno(jméno)}`, {})
-    if (!záznamy || typeof záznamy !== 'object') return 0
-
-    return Object.values(záznamy).reduce((celkem, záznam) => {
-        const minuty = Number(záznam?.minuty)
-        return celkem + (Number.isFinite(minuty) && minuty > 0 ? minuty : 0)
-    }, 0)
-}
-
-function DatumPosunout(datum, početDní){
-    const den = new Date(`${datum}T00:00:00Z`)
-    den.setUTCDate(den.getUTCDate() + početDní)
-    return den.toISOString().slice(0, 10)
-}
-
-function PočetDníVŘadě(záznamy){
-    if (!záznamy || typeof záznamy !== 'object') return 0
-
-    const dnes = new Date()
-    const yyyy = dnes.getFullYear()
-    const mm = String(dnes.getMonth() + 1).padStart(2, '0')
-    const dd = String(dnes.getDate()).padStart(2, '0')
-    const dnešníDatum = `${yyyy}-${mm}-${dd}`
-    const dnesČte = (záznamy[dnešníDatum]?.minuty || 0) > 0
-    const včera = DatumPosunout(dnešníDatum, -1)
-    let datum = dnesČte ? dnešníDatum : včera
-    let početDní = 0
-
-    while ((záznamy[datum]?.minuty || 0) > 0) {
-        početDní++
-        datum = DatumPosunout(datum, -1)
-    }
-
-    return početDní
-}
-
-function VykreslitSoutěž(){
-    const účty = NačístJSON(klíčÚčtů, {})
-    const soutěžící = Object.values(účty && typeof účty === 'object' ? účty : {})
-        .filter(účet =>
-            typeof účet?.jméno === 'string' &&
-            účet.jméno.trim() &&
-            účet.soutěžící !== false
-        )
-        .map(účet => {
-            const jméno = účet.jméno
-            const uloženéZáznamy = NačístJSON(`${předponaZáznamů}${NormalizovatJméno(jméno)}`, {})
-            const záznamy = uloženéZáznamy && typeof uloženéZáznamy === 'object' && !Array.isArray(uloženéZáznamy)
-                ? uloženéZáznamy
-                : {}
-            const všechnyZáznamy = Object.values(záznamy)
-            const knihy = všechnyZáznamy.reduce((celkem, záznam) => {
-                const počet = Number(záznam?.knihy)
-                return celkem + (Number.isFinite(počet) && počet > 0 ? počet : 0)
-            }, 0)
-            const dnes = new Date()
-            const dnešníDatum = `${dnes.getFullYear()}-${String(dnes.getMonth() + 1).padStart(2, '0')}-${String(dnes.getDate()).padStart(2, '0')}`
-            const minutyZaPosledníchSedmDní = Array.from({ length: 7 }, (_, index) =>
-                DatumPosunout(dnešníDatum, index - 6)
-            ).reduce((celkem, datum) => {
-                const minuty = Number(záznamy[datum]?.minuty)
-                return celkem + (Number.isFinite(minuty) && minuty > 0 ? minuty : 0)
-            }, 0)
-
-            return {
-                jméno,
-                minuty: NačístMinuty(jméno),
-                dnyVŘadě: PočetDníVŘadě(záznamy),
-                knihy,
-                průměrZaPosledníchSedmDní: minutyZaPosledníchSedmDní / 7
-            }
-        })
-        .sort((první, druhý) =>
-            druhý.minuty - první.minuty ||
-            druhý.dnyVŘadě - první.dnyVŘadě ||
-            druhý.knihy - první.knihy ||
-            druhý.průměrZaPosledníchSedmDní - první.průměrZaPosledníchSedmDní ||
-            první.jméno.localeCompare(druhý.jméno, 'cs-CZ')
-        )
-
-    const výsledky = document.getElementById('VýsledkySoutěže')
+function ZobrazitStav(text){
     výsledky.replaceChildren()
+    const řádek = document.createElement('tr')
+    řádek.className = 'Řádek'
+    const buňka = document.createElement('td')
+    buňka.className = 'Buňka'
+    buňka.colSpan = 4
+    buňka.textContent = text
+    řádek.append(buňka)
+    výsledky.append(řádek)
+}
 
-    if (soutěžící.length === 0) {
-        const řádek = document.createElement('tr')
-        řádek.className = 'Řádek'
-        const buňka = document.createElement('td')
-        buňka.className = 'Buňka'
-        buňka.colSpan = 4
-        buňka.textContent = 'Zatím nejsou registrovaní žádní uživatelé.'
-        řádek.append(buňka)
-        výsledky.append(řádek)
+async function AktualizovatNastaveníOdkaz(){
+    if (!client) return
+    const { data: { session }, error } = await client.auth.getSession()
+    if (error) {
+        console.error('Stav přihlášení se nepodařilo načíst.', error)
+        return
+    }
+    document.getElementById('NastaveníOdkaz').hidden = !session
+}
+
+async function VykreslitSoutěž(){
+    if (!client) {
+        ZobrazitStav('Tabulka soutěže není nakonfigurována.')
+        return
+    }
+    ZobrazitStav('Načítám výsledky soutěže…')
+    const { data, error } = await client.rpc('get_leaderboard')
+    if (error) {
+        console.error('Žebříček se nepodařilo načíst ze Supabase.', error)
+        ZobrazitStav('Výsledky se nepodařilo načíst. Zkuste stránku obnovit.')
+        return
+    }
+    if (!data.length) {
+        ZobrazitStav('Zatím nejsou v soutěži žádní účastníci.')
         return
     }
 
-    soutěžící.forEach((soutěžící, index) => {
+    výsledky.replaceChildren()
+    data.forEach(soutěžící => {
         const řádek = document.createElement('tr')
         řádek.className = 'Řádek'
-
         for (const hodnota of [
-            `${index + 1}.`,
-            soutěžící.jméno,
-            soutěžící.minuty.toLocaleString('cs-CZ'),
-            String(soutěžící.dnyVŘadě)
+            `${soutěžící.rank_position}.`,
+            soutěžící.display_name,
+            Number(soutěžící.total_minutes).toLocaleString('cs-CZ'),
+            String(soutěžící.current_streak)
         ]) {
             const buňka = document.createElement('td')
             buňka.className = 'Buňka'
             buňka.textContent = hodnota
             řádek.append(buňka)
         }
-
         výsledky.append(řádek)
     })
 }
 
-function AktualizovatNastaveníOdkaz(){
-    const jméno = sessionStorage.getItem('ctenikPrihlasenýUživatel') || localStorage.getItem('ctenikPrihlasenýUživatel') || ''
-    const účty = NačístJSON(klíčÚčtů, {})
-    const starýÚčet = NačístJSON(klíčStaréhoÚčtu, null)
-    const účet = účty && typeof účty === 'object' ? účty[NormalizovatJméno(jméno)] : null
-    const přihlášeno = Boolean(
-        jméno &&
-        (účet || (
-            starýÚčet?.jméno &&
-            starýÚčet?.heslo &&
-            NormalizovatJméno(starýÚčet.jméno) === NormalizovatJméno(jméno)
-        ))
-    )
-    document.getElementById('NastaveníOdkaz').hidden = !přihlášeno
+async function DoNastavení(){
+    if (!client) {
+        window.alert('Připojení k Supabase není nakonfigurováno.')
+        return
+    }
+    const { data: { session }, error } = await client.auth.getSession()
+    if (error) {
+        console.error('Stav přihlášení se nepodařilo načíst.', error)
+        window.alert('Stav přihlášení se nepodařilo ověřit. Zkuste to znovu.')
+        return
+    }
+    if (session) window.location.href = 'Nastavení.html#SoutezTlacitko'
+    else window.alert('Nejprve se přihlaste.')
 }
 
-AktualizovatNastaveníOdkaz()
 VykreslitSoutěž()
-window.addEventListener('storage', event => {
-    if (event.key === klíčÚčtů || event.key === klíčStaréhoÚčtu || event.key === 'ctenikPrihlasenýUživatel') {
-        AktualizovatNastaveníOdkaz()
-    }
-    if (event.key === klíčÚčtů || event.key === klíčStaréhoÚčtu || event.key?.startsWith(předponaZáznamů)) {
-        VykreslitSoutěž()
-    }
+AktualizovatNastaveníOdkaz()
+client?.auth.onAuthStateChange(() => {
+    AktualizovatNastaveníOdkaz().catch(chyba => {
+        console.error('Odkaz na nastavení se nepodařilo aktualizovat.', chyba)
+    })
 })
-
-
-function DoNastavení() {
-    const klíčPřihlášenéhoUživatele = 'ctenikPrihlasenýUživatel'
-
-    if (sessionStorage.getItem(klíčPřihlášenéhoUživatele) || localStorage.getItem(klíčPřihlášenéhoUživatele)) {
-        window.location.href = 'Nastavení.html#SoutezTlacitko#SmazatPosledniZaznam'
-    }
-    else{
-        alert("Nejprve se musíte přihláxit.")
-    }
-}

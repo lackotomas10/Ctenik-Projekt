@@ -6,6 +6,8 @@
     <title>Čteník</title>
     <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -19,28 +21,28 @@
             <img class="modalProfil" src="img/Uživatel.jpg" alt="Uživatelský profil">
             <h2 id="PřihlášeníNadpis">Přihlášení</h2>
             <form id="PřihlášeníForm" onsubmit="PřihlášeníOdeslat(event)">
-                <label for="PřihlašovacíJméno">Jméno</label>
-                <input id="PřihlašovacíJméno" type="text" placeholder="Jan Novák" autocomplete="username" required>
+                <label for="PřihlašovacíEmail">E-mail</label>
+                <input id="PřihlašovacíEmail" type="email" placeholder="jan@example.cz" autocomplete="email" required>
                 <label for="PřihlašovacíHeslo">Heslo</label>
                 <input id="PřihlašovacíHeslo" type="password" placeholder="Heslo" autocomplete="current-password" required>
-                <label class="checkboxŘádek" for="ZapamatovatUživatele">
-                    <input id="ZapamatovatUživatele" type="checkbox">
-                    Zapamatovat uživatele
-                </label>
                 <p id="PřihlášeníChyba" class="formChyba" role="alert"></p>
                 <button type="submit">Přihlásit</button>
+                <button type="button" onclick="ZobrazitRegistraci()">Vytvořit účet</button>
             </form>
             
             <form id="RegistraceForm" onsubmit="RegistraceOdeslat(event)" hidden>
                 <h2>Registrace</h2>
                 <label for="RegistračníJméno">Jméno</label>
                 <input id="RegistračníJméno" type="text" placeholder="Jan Novák" autocomplete="username" required>
+                <label for="RegistračníEmail">E-mail</label>
+                <input id="RegistračníEmail" type="email" placeholder="jan@example.cz" autocomplete="email" required>
                 <label for="RegistračníHeslo">Heslo</label>
                 <input id="RegistračníHeslo" type="password" placeholder="Heslo" autocomplete="new-password" required>
                 <label for="RegistračníHesloZnovu">Heslo znovu</label>
                 <input id="RegistračníHesloZnovu" type="password" placeholder="Heslo" autocomplete="new-password" required>
                 <p id="RegistraceChyba" class="formChyba" role="alert"></p>
                 <button type="submit">Zaregistrovat</button>
+                <button type="button" onclick="ZobrazitPřihlášení()">Zpět na přihlášení</button>
             </form>
         </div>
     </div>

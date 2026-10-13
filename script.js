@@ -5,83 +5,164 @@ const dd = String(dnes.getDate()).padStart(2, '0');
 
 const dnešníDatum = `${yyyy}-${mm}-${dd}`
 const klíčZáznamů = 'ctenikZáznamy'
-const klíčÚčtů = 'ctenikÚčty'
 document.getElementById('Datum').value = dnešníDatum;
 
-const Účty = NačístÚčty()
-let PřihlášenýUživatel = sessionStorage.getItem('ctenikPrihlasenýUživatel') || localStorage.getItem('ctenikPrihlasenýUživatel') || ''
-let Přihlášení = Boolean(PřihlášenýUživatel && Účty[NormalizovatJméno(PřihlášenýUživatel)])
-if (!Přihlášení) {
-    PřihlášenýUživatel = ''
-    sessionStorage.removeItem('ctenikPrihlasenýUživatel')
-    localStorage.removeItem('ctenikPrihlasenýUživatel')
-}
+const supabaseConfig = window.CTENIK_SUPABASE_CONFIG
+const supabaseClient = window.supabase?.createClient && supabaseConfig?.url && supabaseConfig?.publicKey
+    ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.publicKey)
+    : null
+let PřihlášenýUživatel = ''
+let PřihlášenýAuthUživatel = null
+let ÚčastníVSoutěži = false
+let ZáznamyČtení = {}
+let Přihlášení = false
+let ProbíháPřihlášení = false
+let ProbíháUkládání = false
+let PožadavekPoziceVLize = 0
 
-Aktualizace()
+if (!supabaseClient) {
+    document.getElementById('AlarmPřihlášení').innerText =
+        'Přihlášení není nakonfigurováno. Zkontrolujte Supabase konfiguraci.'
+    Aktualizace()
+} else {
+    supabaseClient.auth.onAuthStateChange((událost, relace) => {
+        if (událost === 'SIGNED_OUT') {
+            PožadavekPoziceVLize++
+            PřihlášenýUživatel = ''
+            PřihlášenýAuthUživatel = null
+            ÚčastníVSoutěži = false
+            ZáznamyČtení = {}
+            Přihlášení = false
+            Aktualizace()
+        } else if (relace?.user && ['SIGNED_IN', 'INITIAL_SESSION', 'USER_UPDATED'].includes(událost)) {
+            Promise.resolve()
+                .then(() => NastavitPřihlášenéhoUživatele(relace.user))
+                .catch(chyba => {
+                    console.error('Profil přihlášeného uživatele se nepodařilo načíst.', chyba)
+                    ZobrazitChybuPřihlášení('Profil se nepodařilo načíst. Obnovte stránku.')
+                })
+        }
+    })
+    supabaseClient.auth.getSession().then(({ data, error }) => {
+        if (error) {
+            ZobrazitChybuPřihlášení(error.message)
+            return
+        }
+        return data.session?.user
+            ? NastavitPřihlášenéhoUživatele(data.session.user)
+            : Aktualizace()
+    }).catch(chyba => {
+        console.error('Stav přihlášení se nepodařilo načíst.', chyba)
+        ZobrazitChybuPřihlášení('Stav přihlášení se nepodařilo načíst. Obnovte stránku.')
+    })
+}
 
 document.getElementById('PřihlášeníOkno').addEventListener('click', (event) => {
     if (event.target.id === 'PřihlášeníOkno') ZavřítPřihlášení()
 })
 
-function Záznam(){
+async function Záznam(){
+    if (ProbíháUkládání) return
     const datum = document.getElementById('Datum').value
     const minuty = Number(document.getElementById('MinČtení').value)
-    if (!datum || !Number.isFinite(minuty) || minuty < 0 || minuty > 1440) {
-        alert('Zadejte platné datum a počet minut (alespoň 0, maximálně 1440).')
+    if (!datum || !Number.isInteger(minuty) || minuty < 0 || minuty > 1440) {
+        alert('Zadejte platné datum a celý počet minut (alespoň 0, maximálně 1440).')
         return
     }
 
-    const záznamy = NačístZáznamy()
-    const záznam = záznamy[datum] || { minuty: 0, knihy: 0 }
-    záznam.minuty += minuty
-    záznam.knihy += Number(document.getElementById('Dočtení').checked)
-    záznamy[datum] = záznam
-    localStorage.setItem(KlíčZáznamůUživatele(), JSON.stringify(záznamy))
-    document.getElementById('Dočtení').checked = false
-    Aktualizace()
-}
-
-function NormalizovatJméno(jméno){
-    return jméno.trim().toLocaleLowerCase('cs-CZ')
-}
-
-function NačístÚčty(){
+    if (!PřihlášenýAuthUživatel) return
+    const předchozíZáznam = ZáznamyČtení[datum] || { minuty: 0, knihy: 0 }
+    if (předchozíZáznam.minuty + minuty > 1440) {
+        alert('Celkový počet minut za jeden den nemůže překročit 1440.')
+        return
+    }
+    const záznam = {
+        user_id: PřihlášenýAuthUživatel.id,
+        entry_date: datum,
+        minutes: předchozíZáznam.minuty + minuty,
+        books: předchozíZáznam.knihy + Number(document.getElementById('Dočtení').checked)
+    }
+    ProbíháUkládání = true
     try {
-        const účty = JSON.parse(localStorage.getItem(klíčÚčtů) || '{}') || {}
-        const starýÚčet = JSON.parse(localStorage.getItem('ctenikÚčet') || 'null')
-        if (starýÚčet?.jméno && starýÚčet?.heslo) {
-            const klíč = NormalizovatJméno(starýÚčet.jméno)
-            if (!účty[klíč]) {
-                účty[klíč] = starýÚčet
-                localStorage.setItem(klíčÚčtů, JSON.stringify(účty))
-            }
-        }
-        return účty
-    } catch {
-        return {}
+        const { error } = await supabaseClient
+            .from('reading_entries')
+            .upsert(záznam, { onConflict: 'user_id,entry_date' })
+        if (error) throw error
+        ZáznamyČtení[datum] = { minuty: záznam.minutes, knihy: záznam.books }
+        document.getElementById('Dočtení').checked = false
+        Aktualizace()
+    } catch (chyba) {
+        console.error('Záznam čtení se nepodařilo uložit do Supabase.', chyba)
+        alert('Záznam se nepodařilo uložit. Zkontrolujte připojení a zkuste to znovu.')
+    } finally {
+        ProbíháUkládání = false
     }
 }
 
-function KlíčZáznamůUživatele(){
-    return `${klíčZáznamů}:${NormalizovatJméno(PřihlášenýUživatel)}`
+async function NačístZáznamy(){
+    if (!PřihlášenýAuthUživatel) return
+    const { data, error } = await supabaseClient
+        .from('reading_entries')
+        .select('entry_date, minutes, books')
+        .eq('user_id', PřihlášenýAuthUživatel.id)
+    if (error) throw error
+    ZáznamyČtení = Object.fromEntries(data.map(záznam => [
+        záznam.entry_date,
+        { minuty: záznam.minutes, knihy: záznam.books }
+    ]))
+    await PřenéstStaréZáznamyPokudJsouPrázdné()
 }
 
-function NačístZáznamy(){
-    if (!Přihlášení || !PřihlášenýUživatel) return {}
-    try {
-        const uloženéZáznamy = localStorage.getItem(KlíčZáznamůUživatele())
-        if (uloženéZáznamy) return JSON.parse(uloženéZáznamy) || {}
-
-        const starýÚčet = JSON.parse(localStorage.getItem('ctenikÚčet') || 'null')
-        const staréZáznamy = localStorage.getItem(klíčZáznamů)
-        if (starýÚčet && NormalizovatJméno(starýÚčet.jméno) === NormalizovatJméno(PřihlášenýUživatel) && staréZáznamy) {
-            localStorage.setItem(KlíčZáznamůUživatele(), staréZáznamy)
-            return JSON.parse(staréZáznamy) || {}
+async function PřenéstStaréZáznamyPokudJsouPrázdné(){
+    if (Object.keys(ZáznamyČtení).length) return
+    const klíčJména = PřihlášenýUživatel.trim().toLocaleLowerCase('cs-CZ')
+    const staréZáznamyPodleData = new Map()
+    for (const klíč of [
+        `${klíčZáznamů}:${PřihlášenýAuthUživatel.id}`,
+        `${klíčZáznamů}:${klíčJména}`
+    ]) {
+        let staréZáznamy
+        try {
+            staréZáznamy = JSON.parse(localStorage.getItem(klíč) || 'null')
+        } catch (chyba) {
+            console.error(`Staré záznamy v ${klíč} mají neplatný JSON.`, chyba)
+            continue
         }
-        return {}
-    } catch {
-        return {}
+        if (!staréZáznamy || typeof staréZáznamy !== 'object' || Array.isArray(staréZáznamy)) continue
+        for (const [datum, záznam] of Object.entries(staréZáznamy)) {
+            const parsovanéDatum = /^\d{4}-\d{2}-\d{2}$/.test(datum)
+                ? new Date(`${datum}T00:00:00Z`)
+                : null
+            const validníDatum = parsovanéDatum &&
+                !Number.isNaN(parsovanéDatum.getTime()) &&
+                parsovanéDatum.toISOString().slice(0, 10) === datum
+            const knihy = záznam?.knihy == null ? 0 : Number(záznam.knihy)
+            const minuty = Number(záznam?.minuty)
+            if (!validníDatum || !Number.isInteger(minuty) || minuty < 0 || minuty > 1440 ||
+                !Number.isInteger(knihy) || knihy < 0) continue
+            const předchozí = staréZáznamyPodleData.get(datum)
+            staréZáznamyPodleData.set(datum, {
+                user_id: PřihlášenýAuthUživatel.id,
+                entry_date: datum,
+                minutes: Math.max(předchozí?.minutes || 0, minuty),
+                books: Math.max(předchozí?.books || 0, knihy)
+            })
+        }
     }
+    const záznamy = [...staréZáznamyPodleData.values()]
+    if (!záznamy.length || !window.confirm(
+        `Našel jsem ${záznamy.length} starých místních záznamů pro jméno „${PřihlášenýUživatel}“. ` +
+        'Importovat je do vašeho nového účtu? Místní kopie zůstane zachována.'
+    )) return
+
+    const { error } = await supabaseClient
+        .from('reading_entries')
+        .upsert(záznamy, { onConflict: 'user_id,entry_date', ignoreDuplicates: true })
+    if (error) throw error
+    ZáznamyČtení = Object.fromEntries(záznamy.map(záznam => [
+        záznam.entry_date,
+        { minuty: záznam.minutes, knihy: záznam.books }
+    ]))
 }
 
 function DatumPosunout(datum, početDní){
@@ -171,15 +252,20 @@ function AktualizovatŘadu(záznamy){
 
 function Přihlásit(){
     if (Přihlášení) {
-        sessionStorage.removeItem('ctenikPrihlasenýUživatel')
-        localStorage.removeItem('ctenikPrihlasenýUživatel')
-        PřihlášenýUživatel = ''
-        Přihlášení = false
-        Aktualizace()
+        if (ProbíháPřihlášení || !supabaseClient) return
+        ProbíháPřihlášení = true
+        supabaseClient.auth.signOut().then(({ error }) => {
+            if (error) {
+                ZobrazitChybuPřihlášení('Odhlášení se nepodařilo. Zkuste to znovu.')
+                console.error('Odhlášení ze Supabase se nepodařilo.', error)
+            }
+        }).finally(() => {
+            ProbíháPřihlášení = false
+        })
         return
     }
     document.getElementById('PřihlášeníOkno').hidden = false
-    document.getElementById('PřihlašovacíJméno').focus()
+    document.getElementById('PřihlašovacíEmail').focus()
 }
 
 function ZavřítPřihlášení(){
@@ -197,57 +283,121 @@ function ZobrazitPřihlášení(){
     document.getElementById('RegistraceForm').hidden = true
     document.getElementById('PřihlášeníForm').hidden = false
     document.getElementById('PřihlášeníChyba').innerText = ''
-    document.getElementById('PřihlašovacíJméno').focus()
+    document.getElementById('PřihlašovacíEmail').focus()
 }
 
-function PřihlášeníOdeslat(event){
+async function PřihlášeníOdeslat(event){
     event.preventDefault()
-    const jméno = document.getElementById('PřihlašovacíJméno').value.trim()
+    if (ProbíháPřihlášení) return
+    const email = document.getElementById('PřihlašovacíEmail').value.trim()
     const heslo = document.getElementById('PřihlašovacíHeslo').value
-    const účet = Účty[NormalizovatJméno(jméno)]
     const chyba = document.getElementById('PřihlášeníChyba')
-
-    if (!účet || účet.heslo !== heslo) {
-        chyba.innerText = 'Jméno nebo heslo není správně.'
+    if (!supabaseClient) {
+        chyba.innerText = 'Přihlášení není nakonfigurováno. Zkontrolujte připojení k Supabase.'
         return
     }
-
-    PřihlášenýUživatel = účet.jméno
-    Přihlášení = true
-    sessionStorage.setItem('ctenikPrihlasenýUživatel', PřihlášenýUživatel)
-    if (document.getElementById('ZapamatovatUživatele').checked) {
-        localStorage.setItem('ctenikPrihlasenýUživatel', PřihlášenýUživatel)
-    } else {
-        localStorage.removeItem('ctenikPrihlasenýUživatel')
-    }
+    ProbíháPřihlášení = true
     chyba.innerText = ''
-    ZavřítPřihlášení()
-    Aktualizace()
+    try {
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password: heslo })
+        if (error) chyba.innerText = 'Přihlášení se nepodařilo. Zkontrolujte e-mail a heslo.'
+    } catch (chybaPřihlášení) {
+        console.error('Přihlášení přes Supabase se nepodařilo.', chybaPřihlášení)
+        chyba.innerText = 'Nepodařilo se spojit se službou přihlášení. Zkuste to znovu.'
+    } finally {
+        ProbíháPřihlášení = false
+    }
 }
 
-function RegistraceOdeslat(event){
+async function RegistraceOdeslat(event){
     event.preventDefault()
+    if (ProbíháPřihlášení) return
     const jméno = document.getElementById('RegistračníJméno').value.trim()
+    const email = document.getElementById('RegistračníEmail').value.trim()
     const heslo = document.getElementById('RegistračníHeslo').value
     const hesloZnovu = document.getElementById('RegistračníHesloZnovu').value
     const chyba = document.getElementById('RegistraceChyba')
 
+    if (!supabaseClient) {
+        chyba.innerText = 'Registrace není nakonfigurována. Zkontrolujte připojení k Supabase.'
+        return
+    }
     if (heslo !== hesloZnovu) {
         chyba.innerText = 'Hesla se musí shodovat.'
         return
     }
-    const klíčJména = NormalizovatJméno(jméno)
-    if (Účty[klíčJména]) {
-        chyba.innerText = 'Účet už existuje. Přihlaste se.'
+    if (!jméno || jméno.length > 40) {
+        chyba.innerText = 'Zadejte jméno o délce 1 až 40 znaků.'
         return
     }
 
-    Účty[klíčJména] = { jméno, heslo }
-    localStorage.setItem(klíčÚčtů, JSON.stringify(Účty))
-    document.getElementById('PřihlašovacíJméno').value = jméno
-    document.getElementById('PřihlašovacíHeslo').value = ''
-    document.getElementById('RegistraceForm').reset()
-    ZobrazitPřihlášení()
+    ProbíháPřihlášení = true
+    chyba.innerText = ''
+    try {
+        const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password: heslo,
+            options: {
+                data: { display_name: jméno },
+                emailRedirectTo: window.location.href.split('?')[0]
+            }
+        })
+        if (error) {
+            chyba.innerText = 'Registrace se nepodařila. Ověřte e-mail a podmínky hesla.'
+            console.error('Registrace přes Supabase se nepodařila.', error)
+            return
+        }
+        if (!data.session) {
+            chyba.innerText = 'Účet byl vytvořen. Potvrďte registraci odkazem v e-mailu a potom se přihlaste.'
+            return
+        }
+        document.getElementById('RegistraceForm').reset()
+        ZavřítPřihlášení()
+    } catch (chybaRegistrace) {
+        console.error('Registraci přes Supabase se nepodařilo dokončit.', chybaRegistrace)
+        chyba.innerText = 'Nepodařilo se spojit se službou registrace. Zkuste to znovu.'
+    } finally {
+        ProbíháPřihlášení = false
+    }
+}
+
+async function NastavitPřihlášenéhoUživatele(uživatel){
+    const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('display_name, competition_enabled')
+        .eq('id', uživatel.id)
+        .single()
+    if (error) {
+        console.error('Profil přihlášeného uživatele se nepodařilo načíst.', error)
+        ZobrazitChybuPřihlášení('Přihlášení proběhlo, ale profil se nepodařilo načíst.')
+        return
+    }
+    PřihlášenýAuthUživatel = uživatel
+    PřihlášenýUživatel = data.display_name
+    ÚčastníVSoutěži = data.competition_enabled
+    Přihlášení = true
+    try {
+        localStorage.removeItem('ctenikÚčty')
+        localStorage.removeItem('ctenikÚčet')
+    } catch (chybaÚložiště) {
+        console.error('Staré lokální přihlašovací údaje se nepodařilo odstranit.', chybaÚložiště)
+    }
+    try {
+        await NačístZáznamy()
+    } catch (chybaZáznamů) {
+        Přihlášení = false
+        console.error('Záznamy čtení se nepodařilo načíst.', chybaZáznamů)
+        ZobrazitChybuPřihlášení('Záznamy se nepodařilo načíst z databáze. Obnovte stránku.')
+        Aktualizace()
+        return
+    }
+    ZavřítPřihlášení()
+    Aktualizace()
+}
+
+function ZobrazitChybuPřihlášení(zpráva){
+    const chyba = document.getElementById('PřihlášeníChyba')
+    if (chyba) chyba.innerText = zpráva
 }
 
 function Aktualizace(){
@@ -273,7 +423,7 @@ function Aktualizace(){
         document.getElementById("ZáznTlačítko").classList.remove("ZakázanéTlačítko")
         document.getElementById("ZáznTlačítko").onclick = function() { Záznam() }
     }
-    const záznamy = NačístZáznamy()
+    const záznamy = ZáznamyČtení
     const dny = Object.values(záznamy)
     const minutyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.minuty) || 0), 0)
     const knihyCelkem = dny.reduce((součet, záznam) => součet + (Number(záznam.knihy) || 0), 0)
@@ -311,81 +461,74 @@ function ZobrazitUkázkovéStatistiky(){
 }
 
 function AktualizovatPoziciVLize(){
-    const aktuálníÚčty = NačístÚčty()
-    const záznamyUživatelů = Object.values(aktuálníÚčty)
-        .filter(účet =>
-            typeof účet?.jméno === 'string' &&
-            účet.jméno.trim() &&
-            účet.soutěžící !== false
+    const výstup = document.getElementById('PoziceVLizeHodnota')
+    if (!Přihlášení || !PřihlášenýAuthUživatel) return
+    if (!ÚčastníVSoutěži) {
+        PožadavekPoziceVLize++
+        výstup.innerText = 'Momentálně nejsi zapojený do soutěže.'
+        return
+    }
+
+    const požadavek = ++PožadavekPoziceVLize
+    výstup.innerText = 'Načítám tvoje pořadí v lize…'
+    supabaseClient.rpc('get_leaderboard').then(({ data, error }) => {
+        if (požadavek !== PožadavekPoziceVLize) return
+        if (error) {
+            console.error('Pozici v žebříčku se nepodařilo načíst ze Supabase.', error)
+            výstup.innerText = 'Pozici v lize se nepodařilo načíst. Zkus obnovit stránku.'
+            return
+        }
+
+        const celkemMinut = Object.values(ZáznamyČtení)
+            .reduce((součet, záznam) => součet + (Number(záznam.minuty) || 0), 0)
+        const řada = SpočítatŘaduVPraze()
+        const shody = data.filter(soutěžící =>
+            soutěžící.display_name === PřihlášenýUživatel &&
+            Number(soutěžící.total_minutes) === celkemMinut &&
+            Number(soutěžící.current_streak) === řada
         )
-        .map(účet => {
-            let záznamy = {}
-            try {
-                const uloženéZáznamy = localStorage.getItem(`${klíčZáznamů}:${NormalizovatJméno(účet.jméno)}`)
-                const načtenéZáznamy = JSON.parse(uloženéZáznamy || '{}')
-                if (načtenéZáznamy && typeof načtenéZáznamy === 'object' && !Array.isArray(načtenéZáznamy)) {
-                    záznamy = načtenéZáznamy
-                }
-            } catch {
-                záznamy = {}
-            }
+        if (shody.length === 1) {
+            výstup.innerText = `${shody[0].rank_position}. místo`
+        } else if (shody.length > 1) {
+            výstup.innerText = 'Tvoje pořadí nelze určit, protože stejné jméno používá více soutěžících.'
+        } else {
+            výstup.innerText = 'V žebříčku se zatím nezobrazuješ. Zkus obnovit stránku.'
+        }
+    }).catch(chyba => {
+        if (požadavek !== PožadavekPoziceVLize) return
+        console.error('Pozici v žebříčku se nepodařilo načíst ze Supabase.', chyba)
+        výstup.innerText = 'Pozici v lize se nepodařilo načíst. Zkus obnovit stránku.'
+    })
+}
 
-            const minuty = Object.values(záznamy).reduce((celkem, záznam) => {
-                const hodnota = Number(záznam?.minuty)
-                return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
-            }, 0)
-            const knihy = Object.values(záznamy).reduce((celkem, záznam) => {
-                const hodnota = Number(záznam?.knihy)
-                return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
-            }, 0)
-            const dnes = new Date()
-            const datumDnes = `${dnes.getFullYear()}-${String(dnes.getMonth() + 1).padStart(2, '0')}-${String(dnes.getDate()).padStart(2, '0')}`
-            const minutyZaPosledníchSedmDní = Array.from({ length: 7 }, (_, index) =>
-                DatumPosunout(datumDnes, index - 6)
-            ).reduce((celkem, datum) => {
-                const hodnota = Number(záznamy[datum]?.minuty)
-                return celkem + (Number.isFinite(hodnota) && hodnota > 0 ? hodnota : 0)
-            }, 0)
-            let datumŘady = (Number(záznamy[datumDnes]?.minuty) || 0) > 0
-                ? datumDnes
-                : DatumPosunout(datumDnes, -1)
-            let dnyVŘadě = 0
+function SpočítatŘaduVPraze(){
+    const částiData = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Prague',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).formatToParts(new Date())
+    const části = Object.fromEntries(částiData.map(část => [část.type, část.value]))
+    const dnesVPraze = `${části.year}-${části.month}-${části.day}`
+    let datum = (ZáznamyČtení[dnesVPraze]?.minuty || 0) > 0
+        ? dnesVPraze
+        : DatumPosunout(dnesVPraze, -1)
+    let početDní = 0
 
-            while ((Number(záznamy[datumŘady]?.minuty) || 0) > 0) {
-                dnyVŘadě++
-                datumŘady = DatumPosunout(datumŘady, -1)
-            }
-
-            return {
-                jméno: účet.jméno,
-                minuty,
-                dnyVŘadě,
-                knihy,
-                průměrZaPosledníchSedmDní: minutyZaPosledníchSedmDní / 7
-            }
-        })
-        .sort((první, druhý) =>
-            druhý.minuty - první.minuty ||
-            druhý.dnyVŘadě - první.dnyVŘadě ||
-            druhý.knihy - první.knihy ||
-            druhý.průměrZaPosledníchSedmDní - první.průměrZaPosledníchSedmDní ||
-            první.jméno.localeCompare(druhý.jméno, 'cs-CZ')
-        )
-
-    const pozice = záznamyUživatelů.findIndex(účet =>
-        NormalizovatJméno(účet.jméno) === NormalizovatJméno(PřihlášenýUživatel)
-    )
-    document.getElementById('PoziceVLizeHodnota').innerText = pozice < 0
-        ? 'Nejste zařazeni do ligy. Účast můžete zapnout v nastavení.'
-        : `${pozice + 1}. místo z ${záznamyUživatelů.length}`
+    while (datum >= DatumPosunout(dnesVPraze, -3660) &&
+        (ZáznamyČtení[datum]?.minuty || 0) > 0) {
+        početDní++
+        datum = DatumPosunout(datum, -1)
+    }
+    return početDní
 }
 
 window.addEventListener('storage', event => {
-    if (event.key === klíčÚčtů || event.key?.startsWith(`${klíčZáznamů}:`)) {
+    if (event.key?.startsWith(`${klíčZáznamů}:`)) {
         if (Přihlášení) AktualizovatPoziciVLize()
     }
 })
 
 window.addEventListener('resize', () => {
-    if (Přihlášení) VykreslitGraf(NačístZáznamy())
+    if (Přihlášení) VykreslitGraf(ZáznamyČtení)
 })
