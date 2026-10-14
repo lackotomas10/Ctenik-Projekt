@@ -66,6 +66,9 @@ if (!supabaseClient) {
 document.getElementById('PřihlášeníOkno').addEventListener('click', (event) => {
     if (event.target.id === 'PřihlášeníOkno') ZavřítPřihlášení()
 })
+document.getElementById('RegistraceOkno').addEventListener('click', (event) => {
+    if (event.target.id === 'RegistraceOkno') ZavřítPřihlášení()
+})
 
 async function Záznam(){
     if (ProbíháUkládání) return
@@ -270,24 +273,24 @@ function Přihlásit(){
         })
         return
     }
-    document.getElementById('PřihlášeníOkno').hidden = false
-    document.getElementById('PřihlašovacíEmail').focus()
+    ZobrazitPřihlášení()
 }
 
 function ZavřítPřihlášení(){
     document.getElementById('PřihlášeníOkno').hidden = true
+    document.getElementById('RegistraceOkno').hidden = true
 }
 
 function ZobrazitRegistraci(){
-    document.getElementById('PřihlášeníForm').hidden = true
-    document.getElementById('RegistraceForm').hidden = false
+    document.getElementById('PřihlášeníOkno').hidden = true
+    document.getElementById('RegistraceOkno').hidden = false
     document.getElementById('RegistraceChyba').innerText = ''
     document.getElementById('RegistračníJméno').focus()
 }
 
 function ZobrazitPřihlášení(){
-    document.getElementById('RegistraceForm').hidden = true
-    document.getElementById('PřihlášeníForm').hidden = false
+    document.getElementById('RegistraceOkno').hidden = true
+    document.getElementById('PřihlášeníOkno').hidden = false
     document.getElementById('PřihlášeníChyba').innerText = ''
     document.getElementById('PřihlašovacíEmail').focus()
 }

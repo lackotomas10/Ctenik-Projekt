@@ -30,8 +30,14 @@
                 <button type="button" onclick="ZobrazitRegistraci()">Vytvořit účet</button>
             </form>
             
-            <form id="RegistraceForm" onsubmit="RegistraceOdeslat(event)" hidden>
-                <h2>Registrace</h2>
+        </div>
+    </div>
+    <div id="RegistraceOkno" class="modal" hidden>
+        <div class="modalObsah" role="dialog" aria-modal="true" aria-labelledby="RegistraceNadpis">
+            <button class="modalZavřít" type="button" onclick="ZavřítPřihlášení()" aria-label="Zavřít">&times;</button>
+            <img class="modalProfil" src="img/Uživatel.jpg" alt="Uživatelský profil">
+            <h2 id="RegistraceNadpis">Registrace</h2>
+            <form id="RegistraceForm" onsubmit="RegistraceOdeslat(event)">
                 <label for="RegistračníJméno">Jméno</label>
                 <input id="RegistračníJméno" type="text" placeholder="Jan Novák" autocomplete="username" required>
                 <label for="RegistračníEmail">E-mail</label>
