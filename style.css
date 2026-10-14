@@ -223,6 +223,15 @@ button:active{
     text-align: center;
 }
 
+#Konec p{
+    text-indent: 0%;
+    text-align: center;
+    text-indent: 0;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+}
+
 #ŘadaSekce{
     border-radius: 6px;
     background-image: linear-gradient(to right, rgba(195, 195, 195, 0.232), rgb(118, 148, 150));
@@ -549,7 +558,7 @@ main h2{
 
     input{
     padding: 3px;
-    width: 27%;
+    width: 38%;
     }
 
     input[type="checkbox"]{

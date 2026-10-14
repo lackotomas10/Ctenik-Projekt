@@ -35,6 +35,29 @@ select
 from auth.users as u
 on conflict (id) do nothing;
 
+drop policy if exists "Users can create their own reading entries"
+    on public.reading_entries;
+create policy "Users can create their own reading entries"
+    on public.reading_entries
+    for insert
+    to authenticated
+    with check (
+        (select auth.uid()) = user_id
+        and entry_date <= (now() at time zone 'Europe/Prague')::date
+    );
+
+drop policy if exists "Users can update their own reading entries"
+    on public.reading_entries;
+create policy "Users can update their own reading entries"
+    on public.reading_entries
+    for update
+    to authenticated
+    using ((select auth.uid()) = user_id)
+    with check (
+        (select auth.uid()) = user_id
+        and entry_date <= (now() at time zone 'Europe/Prague')::date
+    );
+
 create or replace function public.get_leaderboard()
 returns table (
     rank_position bigint,
@@ -69,6 +92,7 @@ as $$
         from public.reading_entries as e
         join eligible_profiles as p on p.id = e.user_id
         cross join app_date
+        where e.entry_date <= app_date.today
         group by e.user_id
     ),
     numbered_reading_days as (

@@ -55,14 +55,20 @@ create policy "Users can create their own reading entries"
     on public.reading_entries
     for insert
     to authenticated
-    with check ((select auth.uid()) = user_id);
+    with check (
+        (select auth.uid()) = user_id
+        and entry_date <= (now() at time zone 'Europe/Prague')::date
+    );
 
 create policy "Users can update their own reading entries"
     on public.reading_entries
     for update
     to authenticated
     using ((select auth.uid()) = user_id)
-    with check ((select auth.uid()) = user_id);
+    with check (
+        (select auth.uid()) = user_id
+        and entry_date <= (now() at time zone 'Europe/Prague')::date
+    );
 
 create policy "Users can delete their own reading entries"
     on public.reading_entries

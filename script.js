@@ -1,11 +1,17 @@
-const dnes = new Date();
-const yyyy = dnes.getFullYear();
-const mm = String(dnes.getMonth() + 1).padStart(2, '0');
-const dd = String(dnes.getDate()).padStart(2, '0');
+function DatumVPraze(datum = new Date()){
+    const části = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Prague',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).formatToParts(datum).map(část => [část.type, část.value]))
+    return `${části.year}-${části.month}-${části.day}`
+}
 
-const dnešníDatum = `${yyyy}-${mm}-${dd}`
+const dnešníDatum = DatumVPraze()
 const klíčZáznamů = 'ctenikZáznamy'
-document.getElementById('Datum').value = dnešníDatum;
+document.getElementById('Datum').value = dnešníDatum
+document.getElementById('Datum').max = dnešníDatum
 
 const supabaseConfig = window.CTENIK_SUPABASE_CONFIG
 const supabaseClient = window.supabase?.createClient && supabaseConfig?.url && supabaseConfig?.publicKey
@@ -65,8 +71,8 @@ async function Záznam(){
     if (ProbíháUkládání) return
     const datum = document.getElementById('Datum').value
     const minuty = Number(document.getElementById('MinČtení').value)
-    if (!datum || !Number.isInteger(minuty) || minuty < 0 || minuty > 1440) {
-        alert('Zadejte platné datum a celý počet minut (alespoň 0, maximálně 1440).')
+    if (!datum || datum > dnešníDatum || !Number.isInteger(minuty) || minuty < 0 || minuty > 1440) {
+        alert('Zadejte dnešní nebo dřívější datum a celý počet minut (alespoň 0, maximálně 1440).')
         return
     }
 
@@ -502,14 +508,7 @@ function AktualizovatPoziciVLize(){
 }
 
 function SpočítatŘaduVPraze(){
-    const částiData = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Europe/Prague',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).formatToParts(new Date())
-    const části = Object.fromEntries(částiData.map(část => [část.type, část.value]))
-    const dnesVPraze = `${části.year}-${části.month}-${části.day}`
+    const dnesVPraze = DatumVPraze()
     let datum = (ZáznamyČtení[dnesVPraze]?.minuty || 0) > 0
         ? dnesVPraze
         : DatumPosunout(dnesVPraze, -1)
