@@ -27,6 +27,8 @@ for (const file of [
     'Nastavení.html',
     'Soutěž.html',
     'Zásadysokromi.html',
+    'robots.txt',
+    'sitemap.xml',
     'nastaveni.js',
     'script.js',
     'soutez.js',
