@@ -451,11 +451,9 @@ button:active{
 }
 
 .Buňka:hover{
-    background-image: linear-gradient(to bottom, rgb(46, 249, 218), rgb(46, 215, 249));
-    color: rgb(113, 3, 217);
+    color: rgb(74, 4, 139);
     border-radius: 6px;
-    border: 1px solid rgb(255, 179, 0);
-    text-align:center;
+    border: 1px solid rgb(255, 123, 0);
     transition: 0.3s;
 }
 
@@ -554,13 +552,13 @@ main h2{
 }
 
 @media (max-width: 600px){
-    footer .Odkaz h3{
+    #Konec .Odkaz h3{
         font-size: 13px;
     }
 
-    footer .OdkazObr{
-        height: 70px;
-        width: 70px;
+    #Konec .OdkazObr{
+        height: 80px;
+        width: 80px;
 
     }
 
@@ -570,8 +568,8 @@ main h2{
     }
 
     input[type="checkbox"]{
-    height: 1.2;
-    width: 1.2;
+    height: 30px;
+    width: 30px;
     }
 
     button{
@@ -606,13 +604,17 @@ main h2{
     }
 
     #Nadpis{
-    margin-top: 25px;
+    margin-top: 30px;
     }
 
     #Profil{
         margin-right: 1.1%;
-        height: 75px;
-        width: 75px;
+        height: 77px;
+        width: 77px;
+    }
+    
+    #Konec{
+        margin-bottom: 88px;
     }
 
 }
