@@ -447,6 +447,7 @@ function Aktualizace(){
     document.getElementById('Minuty').innerText = 'Minuty čtení: ' + minutyCelkem
     document.getElementById('MinutyZaDen').innerText = 'Minuty za den: ' + minutyZaDen.toLocaleString('cs-CZ', { maximumFractionDigits: 1 })
     document.getElementById('PočKnih').innerText = 'Přečtené knihy: ' + knihyCelkem
+    AktualizovatVíceStatistik(záznamy)
     AktualizovatŘadu(záznamy)
     AktualizovatPoziciVLize()
     VykreslitGraf(záznamy)
@@ -466,7 +467,62 @@ function ZobrazitUkázkovéStatistiky(){
     document.getElementById('Minuty').innerText = `Minuty čtení: ${minutyCelkem}`
     document.getElementById('MinutyZaDen').innerText =
         `Průměr minut čtení za den: ${minutyZaDen.toLocaleString('cs-CZ', { maximumFractionDigits: 1 })}`
+    AktualizovatVíceStatistik(ukázkovéZáznamy)
     VykreslitGraf(ukázkovéZáznamy)
+}
+
+function AktualizovatVíceStatistik(záznamy){
+    const záznamyPodleData = Object.entries(záznamy)
+        .map(([datum, záznam]) => ({
+            datum,
+            minuty: Math.max(0, Number(záznam.minuty) || 0),
+            knihy: Math.max(0, Number(záznam.knihy) || 0)
+        }))
+        .sort((první, druhý) => první.datum.localeCompare(druhý.datum))
+    const minutyCelkem = záznamyPodleData.reduce((součet, záznam) => součet + záznam.minuty, 0)
+    const knihyCelkem = záznamyPodleData.reduce((součet, záznam) => součet + záznam.knihy, 0)
+    const datumPosledních30Dní = DatumPosunout(dnešníDatum, -29)
+    const minutyZaPosledních30Dní = záznamyPodleData
+        .filter(záznam => záznam.datum >= datumPosledních30Dní && záznam.datum <= dnešníDatum)
+        .reduce((součet, záznam) => součet + záznam.minuty, 0)
+    const prvníDatum = záznamyPodleData[0]?.datum
+    const početDníCelkem = prvníDatum
+        ? Math.floor((Date.parse(`${dnešníDatum}T00:00:00Z`) - Date.parse(`${prvníDatum}T00:00:00Z`)) / 86400000) + 1
+        : 0
+    const průměrZaCelouDobu = početDníCelkem ? minutyCelkem / početDníCelkem : 0
+    const nejdelšíŘada = SpočítatNejdelšíŘadu(záznamyPodleData)
+    const posledníDvěČísliceŘady = nejdelšíŘada % 100
+    const koncovkaŘady = posledníDvěČísliceŘady === 1
+        ? 'den'
+        : posledníDvěČísliceŘady >= 2 && posledníDvěČísliceŘady <= 4
+            ? 'dny'
+            : 'dní'
+
+    document.getElementById('PrůměrZaMěsíc').innerText =
+        `${(minutyZaPosledních30Dní / 30).toLocaleString('cs-CZ', { maximumFractionDigits: 1 })} min / den`
+    document.getElementById('PrůměrZaCelouDobu').innerText =
+        `${průměrZaCelouDobu.toLocaleString('cs-CZ', { maximumFractionDigits: 1 })} min / den`
+    document.getElementById('MinutyNaKnihu').innerText = knihyCelkem
+        ? `${(minutyCelkem / knihyCelkem).toLocaleString('cs-CZ', { maximumFractionDigits: 1 })} min`
+        : '—'
+    document.getElementById('NejdelšíŘada').innerText = `${nejdelšíŘada} ${koncovkaŘady}`
+
+}
+
+function SpočítatNejdelšíŘadu(záznamy){
+    let nejdelšíŘada = 0
+    let aktuálníŘada = 0
+    let předchozíDatum = null
+
+    for (const záznam of záznamy) {
+        if (záznam.minuty <= 0) continue
+        aktuálníŘada = předchozíDatum && záznam.datum === DatumPosunout(předchozíDatum, 1)
+            ? aktuálníŘada + 1
+            : 1
+        nejdelšíŘada = Math.max(nejdelšíŘada, aktuálníŘada)
+        předchozíDatum = záznam.datum
+    }
+    return nejdelšíŘada
 }
 
 function AktualizovatPoziciVLize(){
@@ -534,3 +590,13 @@ window.addEventListener('storage', event => {
 window.addEventListener('resize', () => {
     if (Přihlášení) VykreslitGraf(ZáznamyČtení)
 })
+
+
+function OtevřítVícStat(){
+    const tlačítko = document.getElementById('StatistikyMale')
+    const panel = document.getElementById('VíceStatistik')
+    const otevřít = tlačítko.getAttribute('aria-expanded') !== 'true'
+
+    tlačítko.setAttribute('aria-expanded', String(otevřít))
+    panel.setAttribute('aria-hidden', String(!otevřít))
+}

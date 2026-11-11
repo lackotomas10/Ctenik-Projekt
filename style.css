@@ -516,6 +516,95 @@ main h2{
 
 }
 
+#Šipka{
+    width: 33px;
+    height: 33px;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+#StatistikyMale{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 42px;
+    margin: 12px 0 0;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    text-align: left;
+    cursor: pointer;
+}
+
+#StatistikyMale span{
+    font-weight: bold;
+}
+
+#VíceStatistik{
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.35s ease, opacity 0.25s ease;
+}
+
+#StatistikyMale[aria-expanded="true"] + #VíceStatistik{
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+#VíceStatistikObsah{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+    min-height: 0;
+    overflow: hidden;
+    padding-top: 0;
+    transition: padding-top 0.35s ease;
+}
+
+#StatistikyMale[aria-expanded="true"] + #VíceStatistik #VíceStatistikObsah{
+    padding-top: 12px;
+}
+
+.StatistikaDetail{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+    min-height: 72px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid rgba(4, 255, 196, 0.897);
+    border-radius: 8px;
+    background: rgba(4, 255, 197, 0.07);
+}
+
+.StatistikaDetail span{
+    color: white;
+    font-size: 0.9em;
+}
+
+.StatistikaDetail strong{
+    color: rgb(4, 255, 197);
+    font-size: 1.05em;
+}
+
+#StatistikyMale[aria-expanded="true"] #Šipka{
+    transform: rotate(180deg);
+}
+
+#StatistikyMale:focus-visible{
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce){
+    #VíceStatistik,
+    #Šipka{
+        transition: none;
+    }
+}
 
 .nastaveniTlacitko{
     margin: 1px;
@@ -593,6 +682,10 @@ main h2{
 
     .nastaveniFormul{
         padding: 2%;
+    }
+
+    #Šipka{
+        scale: 1.3;
     }
 
     *{
