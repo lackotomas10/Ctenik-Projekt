@@ -59,7 +59,19 @@
                     <p class="formChyba" id="SmazáníÚčtuZpráva" role="status" aria-live="polite"></p>
                     <button class="nastaveniTlacitko" id="SmazatÚčet" type="submit" disabled>Trvale smazat účet</button>
                 </form>
-            </div>   
+                <h2>Změnit jméno</h2>
+                <p>Změní zobrazované jméno ve vašem profilu a v soutěži.</p>
+                <form class="nastaveniFormul" id="ZměnaJménaForm">
+                    <label for="NovéJméno">Nové jméno:</label>
+                    <input id="NovéJméno" type="text" maxlength="40" autocomplete="nickname" required>
+                    <label for="PotvrzovacíEmailJména">E-mail účtu:</label>
+                    <input id="PotvrzovacíEmailJména" type="email" autocomplete="email" required>
+                    <label for="PotvrzovacíHesloJména">Heslo:</label>
+                    <input id="PotvrzovacíHesloJména" type="password" autocomplete="current-password" required>
+                    <p class="formChyba" id="ZměnaJménaZpráva" role="status" aria-live="polite"></p>
+                    <button class="nastaveniTlacitko" id="ZměnitJméno" type="submit" disabled>Změnit jméno</button>
+                </form>
+            </div> 
         
         </div>
     </main>

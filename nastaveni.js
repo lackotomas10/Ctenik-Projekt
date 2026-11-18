@@ -9,7 +9,9 @@ let profile = null
 const rychláZpráva = document.getElementById('RychleZmenyZprava')
 const změnaHeslaZpráva = document.getElementById('ZměnaHeslaZpráva')
 const smazáníÚčtuZpráva = document.getElementById('SmazáníÚčtuZpráva')
+const změnaJménaZpráva = document.getElementById('ZměnaJménaZpráva')
 const smazatÚčetTlačítko = document.getElementById('SmazatÚčet')
+const změnitJménoTlačítko = document.getElementById('ZměnitJméno')
 
 function ZobrazitRychlouZprávu(text){
     rychláZpráva.textContent = text
@@ -56,6 +58,7 @@ async function NačístÚčet(){
         prvek.textContent = profile.display_name
     })
     smazatÚčetTlačítko.disabled = false
+    změnitJménoTlačítko.disabled = false
     AktualizovatTextSoutěže()
 }
 
@@ -67,6 +70,7 @@ document.getElementById('AktualizovatData').addEventListener('click', () => {
 document.getElementById('SmazatVsechnyZaznamy').addEventListener('click', SmazatVsechnyZaznamy)
 document.getElementById('ZměnaHeslaForm').addEventListener('submit', ZměnitHeslo)
 document.getElementById('SmazáníÚčtuForm').addEventListener('submit', SmazatÚčet)
+document.getElementById('ZměnaJménaForm').addEventListener('submit', ZměnitJméno)
 
 NačístÚčet().catch(chyba => ZobrazitChybu(chyba, 'Nastavení uživatele se nepodařilo načíst.'))
 
@@ -173,6 +177,64 @@ async function ZměnitHeslo(event){
     }
     document.getElementById('ZměnaHeslaForm').reset()
     změnaHeslaZpráva.textContent = 'Heslo bylo změněno.'
+}
+
+async function ZměnitJméno(event){
+    event.preventDefault()
+    if (!client || !authUser?.email || !profile) {
+        změnaJménaZpráva.textContent = 'Pro změnu jména se nejprve přihlaste.'
+        return
+    }
+
+    const novéJméno = document.getElementById('NovéJméno').value.trim()
+    const email = document.getElementById('PotvrzovacíEmailJména').value.trim()
+    const heslo = document.getElementById('PotvrzovacíHesloJména').value
+    if (!novéJméno || novéJméno.length > 40) {
+        změnaJménaZpráva.textContent = 'Zadejte jméno o délce 1 až 40 znaků.'
+        return
+    }
+    if (email.toLocaleLowerCase('en-US') !== authUser.email.toLocaleLowerCase('en-US')) {
+        změnaJménaZpráva.textContent = 'Zadaný e-mail neodpovídá přihlášenému účtu.'
+        return
+    }
+
+    změnitJménoTlačítko.disabled = true
+    změnaJménaZpráva.textContent = 'Ověřuji účet…'
+    try {
+        const { data: ověření, error: chybaOvěření } = await client.auth.signInWithPassword({
+            email,
+            password: heslo
+        })
+        if (chybaOvěření || ověření.user?.id !== authUser.id) {
+            if (chybaOvěření) console.error('Účet se nepodařilo ověřit pro změnu jména.', chybaOvěření)
+            změnaJménaZpráva.textContent = 'E-mail nebo heslo není správné.'
+            return
+        }
+
+        const { data, error } = await client
+            .from('profiles')
+            .update({ display_name: novéJméno })
+            .eq('id', authUser.id)
+            .select('display_name, competition_enabled')
+            .single()
+        if (error) {
+            console.error('Jméno profilu se nepodařilo uložit.', error)
+            změnaJménaZpráva.textContent = 'Jméno se nepodařilo uložit. Zkuste to znovu.'
+            return
+        }
+
+        profile = data
+        document.querySelectorAll('.JménoUživatele').forEach(prvek => {
+            prvek.textContent = profile.display_name
+        })
+        document.getElementById('ZměnaJménaForm').reset()
+        změnaJménaZpráva.textContent = 'Jméno bylo změněno.'
+    } catch (chyba) {
+        console.error('Jméno profilu se nepodařilo změnit.', chyba)
+        změnaJménaZpráva.textContent = 'Změnu jména se nepodařilo dokončit. Zkuste to znovu.'
+    } finally {
+        změnitJménoTlačítko.disabled = false
+    }
 }
 
 async function SmazatÚčet(event){
