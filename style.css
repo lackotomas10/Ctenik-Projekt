@@ -412,17 +412,74 @@ button:active{
     text-align: center;
 }
 
+#Tabulka{
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    container-type: inline-size;
+}
+
 #SoutěžTabulka{
+    width: 100%;
+    table-layout: fixed;
     border: 2px solid white;
     border-radius: 9px;
     background-image: radial-gradient( rgb(77, 0, 136), rgb(0, 41, 117));
     align-self: center;
 }
 
-#DnyVŘaděTab{
-    width: 10%;
-    min-width: 44px;
+#SoutěžTabulka th,
+#SoutěžTabulka td{
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
 
+#SoutěžTabulka th:nth-child(1),
+#SoutěžTabulka td:nth-child(1){
+    width: 16%;
+}
+
+#SoutěžTabulka th:nth-child(2),
+#SoutěžTabulka td:nth-child(2){
+    width: 42%;
+}
+
+#VýsledkySoutěže td:nth-child(2){
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#SoutěžTabulka th:nth-child(3),
+#SoutěžTabulka td:nth-child(3){
+    width: 24%;
+}
+
+#SoutěžTabulka th:nth-child(4),
+#SoutěžTabulka td:nth-child(4){
+    width: 18%;
+}
+
+@container (max-width: 340px){
+    #DnyVŘaděTab,
+    #VýsledkySoutěže td:nth-child(4){
+        display: none;
+    }
+
+    #SoutěžTabulka th:nth-child(1),
+    #SoutěžTabulka td:nth-child(1){
+        width: 20%;
+    }
+
+    #SoutěžTabulka th:nth-child(2),
+    #SoutěžTabulka td:nth-child(2){
+        width: 45%;
+    }
+
+    #SoutěžTabulka th:nth-child(3),
+    #SoutěžTabulka td:nth-child(3){
+        width: 35%;
+    }
 }
 
 .Hlava{
