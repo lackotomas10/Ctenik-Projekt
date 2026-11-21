@@ -84,6 +84,7 @@ header{
 
 
 input{
+    transition: 0.6s ease;
     min-width: 100px;
     width: 22%;
     max-width: 160px;
@@ -94,7 +95,19 @@ input{
     outline: none;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 input:focus{
+    transition: 0.6s ease;
     border: 2px solid rgb(200, 253, 253);
     outline: 2px solid rgba(8, 255, 251, 0.866);
     box-shadow: 0px 0px 9px 7px rgba(45, 255, 195, 0.13);
@@ -163,11 +176,11 @@ footer .Odkaz h3{
 footer .OdkazObr{
     height: 60px;
     width: 60px;
-    transition: 0.5s;
+    transition: 0.5s ease;
 }
 
 .OdkazObr:hover{
-    transition: 0.5s;
+    transition: 0.5s ease;
     scale: 1.06;
     rotate: 1deg;
     transform: translateY(-3px);
@@ -192,14 +205,14 @@ button{
     border: 2px solid rgb(4, 255, 197);
     padding: 4px;
     border-radius: 8px;
-    transition: 0.5s;
+    transition: 0.5s ease;
     background-image: radial-gradient(rgb(0, 7, 220), rgba(90, 0, 186, 0.72));
 }
 
 button:hover{
     color: rgb(4, 255, 197);
     border: 2px solid rgb(247, 81, 250);
-    transition: 0.4s;
+    transition: 0.4s ease;
     background-image: radial-gradient(rgb(44, 0, 163), rgba(44, 0, 72, 0.72));
     scale: 1.03;
     cursor: pointer ;
@@ -267,10 +280,11 @@ button:active{
 #Graf{
     display: block;
     width: 100%;
-    max-width: 500px;
     aspect-ratio: 16 / 9;
+      display: block;
+  margin: 0 auto;
     box-sizing: border-box;
-    background-image: linear-gradient(to right, rgb(209, 255, 252), rgb(238, 223, 255));
+    background-image: linear-gradient(to right, rgb(237, 255, 254), rgb(248, 242, 255));
     border: 3px solid rgb(248, 124, 0);
     border-radius: 7px;
 
@@ -281,6 +295,7 @@ button:active{
 }
 
 #StatistikyOmezení{
+    z-index: 1;
     position: absolute;
     inset: 0;
     display: flex;
@@ -576,6 +591,7 @@ main h2{
 #Šipka{
     width: 33px;
     height: 33px;
+    z-index: 0;
     margin-left: auto;
     transition: transform 0.3s ease;
 }
